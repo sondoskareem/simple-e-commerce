@@ -1,8 +1,16 @@
 
 const mongoose = require("mongoose");
 
-const UserSchema = mongoose.Schema({
-	order: {
+const OrderSchema = mongoose.Schema({
+	description: {
+    type: String,
+    required: true
+  },
+  location: {
+    type: String,
+    required: true
+  },
+  phone: {
     type: String,
     required: true
   },
@@ -16,11 +24,27 @@ const UserSchema = mongoose.Schema({
 		ref: 'Section',
 		required: true
   },
-  accepted: {
+  accepted_by_user: {
+    type: Boolean,
+    required: true
+  },
+  accepted_by_center: {
     type: Boolean,
     required: true
   },
   price: {
+    type: String,
+    required: true
+  },
+  image: {
+    type: String,
+    required: true
+  },
+  paid: {
+    type: Boolean,
+    required: true
+  },
+  paidAt: {
     type: String,
     required: true
   },
@@ -35,4 +59,4 @@ const UserSchema = mongoose.Schema({
 });
 
 // export model user with UserSchema
-module.exports = mongoose.model("user", UserSchema);
+module.exports = mongoose.model("Order", OrderSchema);
