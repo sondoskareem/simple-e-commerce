@@ -9,8 +9,8 @@ exports.new_user=function (User) {
         'password': Joi.string().min(6).required(),
         'email': Joi.string().email().required(),
         'location':Joi.string().required(),
-        'role':Joi.string().required(),
         'player_id':Joi.string().required(),
+        'country_id' :Joi.string().required(),
         
     }
     return Joi.validate(User, UserSchema);

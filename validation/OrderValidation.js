@@ -9,6 +9,7 @@ exports.order = function (Order) {
         'phone': Joi.string().required(),
         'section_id': Joi.string().required(),
         'createdAt': Joi.string().required(),
+        'country_id' :Joi.string().required(),
     }
     return Joi.validate(Order, OrderSchema);
 }

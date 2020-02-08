@@ -5,20 +5,35 @@ module.exports = function(path,app) {
 	// var licensecheck = require('../mw/license_check');
     var checkLogin_admin = require('../mw/check_login');
     var check_user = require('../mw/check_user');
+    var check_center = require('../mw/check_center');
+    var generalUser = require('../mw/generalUser');
     
 	var User = require('../controllers/UserController');
 	var Section = require('../controllers/SectionController');
 	var Order = require('../controllers/OrderController');
+	var Country = require('../controllers/CountryController');
 	
 	app.route(`${path}/auth/register`).post(User.create_a_User);
+	app.route(`${path}/auth/registerCenterCall`).post(checkLogin_admin.checkLogin_admin,User.create_a_CenterCallUser);
 	app.route(`${path}/auth/login`).post(User.loginUser);
-	app.route(`${path}/forget/password`).post(User.forgetPassword);
+	app.route(`${path}/change/password`).post(check_user.check_user,User.changePassword);
+	app.route(`${path}/forget/password`).post(User.changePassword);
+
 	app.route(`${path}/users`).get(checkLogin_admin.checkLogin_admin, User.users);
+	app.route(`${path}/user`).get(generalUser.generalUser, User.user_by_token);
 
 	app.route(`${path}/section/add`).post(checkLogin_admin.checkLogin_admin, Section.add_section);
+	app.route(`${path}/section`).get(generalUser.generalUser, Section.get_section);
 	app.route(`${path}/section/update`).post(checkLogin_admin.checkLogin_admin, Section.update);
 
-	app.route(`${path}/order/create`).post(check_user.check_user, Order.add_order);
+	app.route(`${path}/country/add`).post(checkLogin_admin.checkLogin_admin, Country.add_country);
+	app.route(`${path}/country`).get(generalUser.generalUser, Country.get_country);
+	app.route(`${path}/country/update`).post(checkLogin_admin.checkLogin_admin, Country.update);
 
+	app.route(`${path}/order/create`).post(check_user.check_user, Order.add_order);
+	app.route(`${path}/order/acceptedByCenter`).post(check_center.check_center, Order.accepted_by_center);
+	app.route(`${path}/order/acceptedByUser`).post(check_user.check_user, Order.accepted_by_user);
+
+	app.route(`${path}/order/center`).get(check_center.check_center, Order.orderForCenterDashboard);
 
 }

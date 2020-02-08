@@ -8,7 +8,7 @@ const User = require('../models/users')
 var UserValidation = require('../validation/UserValidation');
 const config_token = require("../config/token")
 
-exports.create_a_User = function (req, res) {
+function CreateUser(role , req , res){
 	const validating = UserValidation.new_user(req.body);
 	if (validating.error) {
 	  res.status(400).send({
@@ -24,9 +24,10 @@ exports.create_a_User = function (req, res) {
 				password: hash,
 				email: req.body.email,
 				location: req.body.location,
-				role: req.body.role,
-				isActive: 1,
+				role: role,
+				isActive: true,
 				player_id: req.body.player_id,
+				country_id: req.body.country_id,
 				createdAt:  moment().format('DD/MM/YYYY'),
 				updateddAt: moment().format('DD/MM/YYYY'),
 			  });
@@ -56,13 +57,28 @@ exports.create_a_User = function (req, res) {
 	}  
 }
 
-exports.loginUser = function (req, res) {
+exports.create_a_User = function (req, res) {
+	CreateUser(0 , req, res);
+}
+
+exports.create_a_CenterCallUser = (req , res)=>{
+	CreateUser(1 , req, res);
+}
+exports.loginUser =  (req, res)=> {
 	if (req.body.phone && req.body.password) {
 		  User.find({ phone: req.body.phone })
 			.then(result => {
 				var usercheck = bcrypt.compareSync(req.body.password, result[0].password);
           if (usercheck) {
              if(result[0].isActive){ 
+
+				const filter = { phone: req.body.phone };
+				const data = { player_id: req.body.player_id };
+				User.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
+					if (err) {
+						res.status(400).send({msg :'There\'s something wrong , please try again'})
+					}})
+				// console.log(doc)
 				 var token = jwt.sign({
                 exp: Math.floor(Date.now() / 1000) + (32832000),
                 id: result[0]._id,
@@ -84,7 +100,7 @@ exports.loginUser = function (req, res) {
 	}
 }
 
-exports.forgetPassword = async(req , res) => {
+exports.changePassword = async(req , res) => {
 	if(!req.body.phone || !req.body.password){
 		res.send.status(400).send({msg :'Please inter the required field'})
 
@@ -129,3 +145,6 @@ exports.users = async(req , res) => {
 	}
 	
 }
+ exports.user_by_token = async(req , res)=>{
+	 res.status(200).send({data:req.generalUser})
+ }

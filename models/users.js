@@ -28,12 +28,17 @@ const UserSchema = mongoose.Schema({
     required: true
   },
   isActive: {
-    type: Number,
+    type: Boolean,
     required: true
   },
   role: { //1 call center 0 user
     type: Number,
     required: true
+  },
+  country_id: {
+    type: mongoose.Schema.Types.ObjectId,
+		ref: 'Country',
+		required: true
   },
   createdAt: {
     type: String,

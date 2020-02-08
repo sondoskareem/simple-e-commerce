@@ -6,14 +6,14 @@ const Sections = require('../models/sections')
 exports.add_section = (req , res)=>{
     const section = new Sections({
         _id: new mongoose.Types.ObjectId(),
-        description: req.body.description,
+		description: req.body.description,
+		isActive: true,
         createdAt:  moment().format('DD/MM/YYYY'),
         updateddAt: moment().format('DD/MM/YYYY'),
     })
     section.save()
     .then(result =>{
         res.status(200).send({msg : 'Section added'})
-
     })
     .catch(err =>{
         res.status(400).send({msg:'Somthing went wrong'})
@@ -41,4 +41,14 @@ exports.update = async(req , res) => {
 			res.status(200).send({data : 'Done'})
 		});
 	}
+}
+exports.get_section = async(req , res)=>{
+	Sections.find({isActive:true})
+	.select('description')
+	.then(result =>{
+		res.status(200).send({data:result})
+	})
+	.catch(err =>{
+		res.status(400).send({msg:'err'})
+	})
 }

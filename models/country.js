@@ -1,8 +1,12 @@
 
 const mongoose = require("mongoose");
 
-const SectionSchema = mongoose.Schema({
- description: {
+const CountrySchema = mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  flag: {
     type: String,
     required: true
   },
@@ -21,4 +25,4 @@ const SectionSchema = mongoose.Schema({
 });
 
 // export model user with UserSchema
-module.exports = mongoose.model("section", SectionSchema);
+module.exports = mongoose.model("Contry", CountrySchema);
