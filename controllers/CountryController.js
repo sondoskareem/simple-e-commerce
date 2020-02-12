@@ -63,7 +63,7 @@ exports.get_country = async(req , res)=>{
 	Country.find({isActive:true})
 	.select('description name flag')
 	.then(result =>{
-		res.status(200).send({result})
+		res.status(200).send(result)
 	})
 	.catch(err =>{
 		res.status(400).send({msg:'err'})
