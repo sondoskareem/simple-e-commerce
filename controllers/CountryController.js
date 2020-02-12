@@ -60,8 +60,8 @@ exports.update = async(req , res) => {
 	}
 }
 exports.get_country = async(req , res)=>{
-	Sections.find({isActive:true})
-	.select('description flag')
+	Country.find({isActive:true})
+	.select('description name flag')
 	.then(result =>{
 		res.status(200).send({data:result})
 	})

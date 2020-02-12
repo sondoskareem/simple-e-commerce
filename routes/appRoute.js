@@ -13,6 +13,7 @@ module.exports = function(path,app) {
 	var Order = require('../controllers/OrderController');
 	var Country = require('../controllers/CountryController');
 	
+	app.route(`${path}/auth/admin`).post(User.CreateAdmin);
 	app.route(`${path}/auth/register`).post(User.create_a_User);
 	app.route(`${path}/auth/registerCenterCall`).post(checkLogin_admin.checkLogin_admin,User.create_a_CenterCallUser);
 	app.route(`${path}/auth/login`).post(User.loginUser);

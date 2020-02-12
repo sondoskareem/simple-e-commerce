@@ -10,7 +10,8 @@ exports.check_user= function (req, res, next) {
 			jwt.verify(token, config_token,
 				function (err, decoded) { 
 					if (err) {
-						res.status(401).send({ msg: 'There\'s something wrong' })
+						// res.status(401).send({ msg: 'There\'s something wrong' })
+						res.status(401).send({ msg: err })
 					}
 					User.findOne({
 						_id: decoded.id

@@ -9,6 +9,7 @@ exports.generalUser= function (req, res, next) {
 					if (err) {
 						res.status(401).send({ msg: 'There\'s something wrong' })
 					}
+					console.log(decoded)
 					User.findOne({_id: decoded.id})
 					.select('name email phone location')
 					.then(user =>{
