@@ -143,8 +143,7 @@ exports.loginUser =  (req, res)=> {
 		}
 	})
 	.catch(err =>{
-		// res.status(400).send({msg:'incorrect Phone 6number or password'})
-		res.status(400).send({msg:err})
+		res.status(400).send({msg:'incorrect Phone 6number or password'})
 	})
 	}else{
 		res.status(400).send({msg:'Phone and password required'})
