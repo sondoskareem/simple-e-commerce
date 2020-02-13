@@ -25,7 +25,7 @@ var express = require('express')
 app.use(upload());
 app.use(cors({
   credentials: true,
-}));
+})); 
 
 
 app.use(bodyParser.urlencoded({ extended: true }));

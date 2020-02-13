@@ -7,7 +7,7 @@ const UserSchema = mongoose.Schema({
     required: true
   },
   phone: {
-    type: String,
+    type: Number,
     unique : true,
     required: true
   },
@@ -31,7 +31,7 @@ const UserSchema = mongoose.Schema({
     type: Boolean,
     required: true
   },
-  role_id: { //1 call center 0 user
+  role: { //1 call center 0 user
     type: Number,
     required: true
   },

@@ -76,17 +76,17 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
     if (err) {
       res.status(400).send({msg :'There\'s something wrong , please try again'})
     }
-      let playeyId 
+      let playerId 
         if(player_id == 'center_player_id'){
-          playeyId = doc.center_player_id
+          playerId = doc.center_player_id
         }else{
-          playeyId = doc.user_player_id
+          playerId = doc.user_player_id
         }
               // var message = { 
               //   "app_id": "b2903fd-3291fc3be",
               //   "contents": { "en": " Your request has bee" },
               //   "data": { "data1": order_id},
-              //   "include_player_ids": [playeyId],
+              //   "include_player_ids": [playerId],
               // }
               // sendNotification(message);
     res.status(200).send({data :'request has been sent'})

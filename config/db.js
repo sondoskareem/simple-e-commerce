@@ -3,9 +3,9 @@ const mongoose = require("mongoose");
 
 const MONGOURI = "mongodb://m_center:123456er@ds047652.mlab.com:47652/m_center";
 
-const InitiateMongoServer = async () => {
+const InitiateMongoServer =  () => {
   try {
-    await mongoose.connect(MONGOURI, {
+     mongoose.connect(MONGOURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify:false

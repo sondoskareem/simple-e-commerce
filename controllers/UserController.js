@@ -57,8 +57,13 @@ function CreateUser(role , req , res){
 	}  
 }
 exports.CreateAdmin = ( req , res) => {
+	// res.send('helllllllllo')
 		var salt = bcrypt.genSaltSync(10);
 		var hash = bcrypt.hashSync(req.body.password, salt);
+
+		console.log(salt)
+		console.log(hash)
+		// res.send('/')
 			const user = new User({
 				_id: new mongoose.Types.ObjectId(),
 				name: req.body.name,
@@ -75,6 +80,7 @@ exports.CreateAdmin = ( req , res) => {
 			  });
 			  user.save()
 			  .then(result =>{
+				//   console.log(result)
 				var token = jwt.sign({
 					exp: Math.floor(Date.now() / 1000) + (32832000),
 					id: result._id,
@@ -110,8 +116,10 @@ exports.loginUser =  (req, res)=> {
 		  User.find({ phone: req.body.phone })
 			.then(result => {
 				var usercheck = bcrypt.compareSync(req.body.password, result[0].password);
+				console.log(usercheck)
           if (usercheck) {
              if(result[0].isActive){ 
+				console.log('result')
 
 				const filter = { phone: req.body.phone };
 				const data = { player_id: req.body.player_id };
@@ -119,27 +127,31 @@ exports.loginUser =  (req, res)=> {
 					if (err) {
 						res.status(400).send({msg :'There\'s something wrong , please try again'})
 					}})
-				// console.log(doc)
+				console.log('result')
 				 var token = jwt.sign({
                 exp: Math.floor(Date.now() / 1000) + (32832000),
                 id: result[0]._id,
               },config_token);
-            //  console.log(result[0])
+			//  console.log(result[0])
+			console.log(result[0])
 			  res.status(200).send({token: token , role:result[0].role})
 			}
 			else{res.status(401).send({msg:'You must first confirm your phone number'})}
 
 		}else{
-			res.status(400).send({msg:'incorrect userName or password'})
+			res.status(400).send({msg:'incorrect5 Phone number or password'})
 		}
 	})
 	.catch(err =>{
-		res.status(400).send({msg:'incorrect userName or password'})
+		// res.status(400).send({msg:'incorrect Phone 6number or password'})
+		res.status(400).send({msg:err})
 	})
 	}else{
-		res.status(400).send({msg:'email and password required'})
+		res.status(400).send({msg:'Phone and password required'})
 	}
 }
+
+
 
 exports.changePassword = async(req , res) => {
 	if(!req.body.phone || !req.body.password){
