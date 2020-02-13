@@ -36,5 +36,6 @@ module.exports = function(path,app) {
 	app.route(`${path}/order/acceptedByUser`).post(check_user.check_user, Order.accepted_by_user);
 
 	app.route(`${path}/order/center`).get(check_center.check_center, Order.orderForCenterDashboard);
+	app.route(`${path}/order/user`).get(check_user.check_user, Order.bindingOrderForUser);
 
 }

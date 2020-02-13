@@ -61,8 +61,8 @@ exports.CreateAdmin = ( req , res) => {
 		var salt = bcrypt.genSaltSync(10);
 		var hash = bcrypt.hashSync(req.body.password, salt);
 
-		console.log(salt)
-		console.log(hash)
+		// console.log(salt)
+		// console.log(hash)
 		// res.send('/')
 			const user = new User({
 				_id: new mongoose.Types.ObjectId(),

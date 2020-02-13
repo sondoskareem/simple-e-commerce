@@ -53,6 +53,10 @@ const OrderSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  paidAt: {
+    type: String,
+    required: true
+  },
   arrivalAt: {
     type: String,
     required: true

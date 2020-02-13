@@ -98,7 +98,7 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
 // }
 exports.accepted_by_center = (req , res) =>{
   const data = { 
-    accepted_by_center: true ,
+    accepted_by_center: req.body.accepted_by_center ,
     price: req.body.price ,
     arrivalAt: req.body.arrivalAt ,
     center_player_id:req.check_center.player_id
@@ -111,7 +111,7 @@ exports.accepted_by_center = (req , res) =>{
 
 exports.accepted_by_user = async (req, res) =>{
   const data = { 
-    accepted_by_user: true ,
+    accepted_by_user: req.body.accepted_by_user ,
     paid:req.body.paid,
     paidAt:req.body.paidAt
     };
@@ -122,7 +122,10 @@ exports.accepted_by_user = async (req, res) =>{
 }
 
 exports.orderForCenterDashboard = async(req , res)=>{
-  await Order.find({country_id : req.check_center.country_id})
+  await Order.find({country_id : req.check_center.country_id ,
+                    accepted_by_user:false ,
+                    accepted_by_center:false
+                  })
   .then(result =>{
     res.status(200).send({data:result})
   })
@@ -130,6 +133,8 @@ exports.orderForCenterDashboard = async(req , res)=>{
     res.status(400).send({msg:'err'})
   })
 }
+
+
 exports.orderForAdmin = async(req , res)=>{
   await Order.find({country_id : req.query.country_id})
   .then(result =>{
@@ -139,8 +144,15 @@ exports.orderForAdmin = async(req , res)=>{
     res.status(400).send({msg:'err'})
   })
 }
-exports.orderForUserProfile = async(req , res)=>{
-  await Order.find({country_id : req.query.country_id})
+
+
+exports.bindingOrderForUser = async(req , res)=>{
+  await Order.find({
+                    user_id : req.check_user._id,
+                    accepted_by_user:false ,
+                    accepted_by_center:true
+                  }).select('order1 phone location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
+                  
   .then(result =>{
     res.status(200).send({data:result})
   })
