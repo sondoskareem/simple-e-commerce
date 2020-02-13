@@ -151,7 +151,7 @@ exports.bindingOrderForUser = async(req , res)=>{
                     user_id : req.check_user._id,
                     accepted_by_user:false ,
                     accepted_by_center:true
-                  }).select('order1 phone location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
+                  }).select('order1 phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
                   
   .then(result =>{
     res.status(200).send({data:result})
