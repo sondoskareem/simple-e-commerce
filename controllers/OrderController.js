@@ -149,8 +149,8 @@ exports.orderForAdmin = async(req , res)=>{
 exports.bindingOrderForUser = async(req , res)=>{
   await Order.find({
                     user_id : req.check_user._id,
-                    accepted_by_user:false ,
-                    accepted_by_center:true
+                    accepted_by_user:req.query.accepted_by_user ,
+                    accepted_by_center:req.query.accepted_by_center
                   }).select('order1 phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
                   
   .then(result =>{
