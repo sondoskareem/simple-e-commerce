@@ -123,9 +123,9 @@ exports.accepted_by_user = async (req, res) =>{
 
 exports.orderForCenterDashboard = async(req , res)=>{
   await Order.find({country_id : req.check_center.country_id ,
-                    accepted_by_user:false ,
-                    accepted_by_center:false
-                  })
+                    accepted_by_user:req.query.acceptedByUser ,
+                    accepted_by_center:req.query.acceptedByCenter
+                  }).select('order1 phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
   .then(result =>{
     res.status(200).send({data:result})
   })
@@ -136,22 +136,29 @@ exports.orderForCenterDashboard = async(req , res)=>{
 
 
 exports.orderForAdmin = async(req , res)=>{
-  await Order.find({country_id : req.query.country_id})
+  await Order.find({
+                accepted_by_user:req.query.acceptedByUser ,
+                accepted_by_center:req.query.acceptedByCenter
+  })
+  .populate('country_id' , 'name flag')
+  .select('order1 phone accepted_by_user country_id location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
   .then(result =>{
-    res.status(200).send({data:result})
-  })
-  .catch(err =>{
-    res.status(400).send({msg:'err'})
-  })
+  res.status(200).send({data:result})
+})
+.catch(err =>{
+  res.status(400).send({msg:err})
+})
 }
 
 
-exports.bindingOrderForUser = async(req , res)=>{
+exports.OrderForUser = async(req , res)=>{
   await Order.find({
                     user_id : req.check_user._id,
-                    accepted_by_user:req.query.accepted_by_user ,
-                    accepted_by_center:req.query.accepted_by_center
-                  }).select('order1 phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
+                    accepted_by_user:req.query.acceptedByUser ,
+                    accepted_by_center:req.query.acceptedByCenter
+                  })
+                  .populate('country_id' , 'name flag')
+                  .select('order1 phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
                   
   .then(result =>{
     res.status(200).send({data:result})

@@ -197,6 +197,6 @@ exports.users = async(req , res) => {
 	}
 	
 }
- exports.user_by_token = async(req , res)=>{
+exports.user_by_token = async(req , res)=>{
 	 res.status(200).send({data:req.generalUser})
  }

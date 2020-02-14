@@ -25,4 +25,4 @@ const CountrySchema = mongoose.Schema({
 });
 
 // export model user with UserSchema
-module.exports = mongoose.model("Contry", CountrySchema);
+module.exports = mongoose.model('Country', CountrySchema);
