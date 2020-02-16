@@ -121,45 +121,40 @@ exports.accepted_by_user = async (req, res) =>{
    updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
 }
 
-exports.orderForCenterDashboard = async(req , res)=>{
-  await Order.find({country_id : req.check_center.country_id ,
-                    accepted_by_user:req.query.acceptedByUser ,
-                    accepted_by_center:req.query.acceptedByCenter
-                  }).select('order1 phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
-  .then(result =>{
-    res.status(200).send({data:result})
-  })
-  .catch(err =>{
-    res.status(400).send({msg:'err'})
-  })
+exports.orderForCenter = (req , res)=>{
+  const obj = {
+    country_id : req.check_center.country_id ,
+    accepted_by_user:req.query.acceptedByUser ,
+    accepted_by_center:req.query.acceptedByCenter
+  }
+  query(obj , req , res)
+  
 }
 
 
-exports.orderForAdmin = async(req , res)=>{
-  await Order.find({
-                accepted_by_user:req.query.acceptedByUser ,
-                accepted_by_center:req.query.acceptedByCenter
-  })
+exports.orderForAdmin = (req , res)=>{
+  const obj = {
+    accepted_by_user:req.query.acceptedByUser ,
+    accepted_by_center:req.query.acceptedByCenter
+  }
+  query(obj , req , res)
+}
+
+
+exports.OrderForUser = (req , res)=>{
+  const obj = {
+    user_id : req.check_user._id,
+    accepted_by_user:req.query.acceptedByUser ,
+    accepted_by_center:req.query.acceptedByCenter
+  }
+  query(obj , req , res)
+}
+
+
+async function query(params, req , res){
+  await Order.find(params)
   .populate('country_id' , 'name flag')
-  .select('order1 phone accepted_by_user country_id location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
-  .then(result =>{
-  res.status(200).send({data:result})
-})
-.catch(err =>{
-  res.status(400).send({msg:err})
-})
-}
-
-
-exports.OrderForUser = async(req , res)=>{
-  await Order.find({
-                    user_id : req.check_user._id,
-                    accepted_by_user:req.query.acceptedByUser ,
-                    accepted_by_center:req.query.acceptedByCenter
-                  })
-                  .populate('country_id' , 'name flag')
-                  .select('order1 phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
-                  
+  .select('order1 phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
   .then(result =>{
     res.status(200).send({data:result})
   })

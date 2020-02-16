@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 const SectionSchema = mongoose.Schema({
  description: {
+  unique : true,
     type: String,
     required: true
   },
