@@ -18,16 +18,17 @@ exports.add_order =  (req, res) =>{
 		msg: validating.error.details[0].message
       })
     }else{
-      if(req.files.file){
-        var file = req.files.file;
-        var changetype = file.mimetype.split("/", 1);
-        if (changetype == 'image') {
-          let name = file.name;
-          var FileUud = uuidv1();
-          const ExtArr = file.mimetype.split("/", 2)
-          var Filepath = "./public/" + FileUud + '.' + ExtArr[1];
-          var urlFile = FileUud + '.' + ExtArr[1];
-          file.mv(Filepath);
+      console.log(req.files.file)
+      // if(req.files.file){
+      //   var file = req.files.file;
+      //   var changetype = file.mimetype.split("/", 1);
+      //   if (changetype == 'image') {
+      //     let name = file.name;
+      //     var FileUud = uuidv1();
+      //     const ExtArr = file.mimetype.split("/", 2)
+      //     var Filepath = "./public/" + FileUud + '.' + ExtArr[1];
+      //     var urlFile = FileUud + '.' + ExtArr[1];
+      //     file.mv(Filepath);
           const order = new Order({
             description:req.body.description,
             phone:req.body.phone,
@@ -39,7 +40,7 @@ exports.add_order =  (req, res) =>{
             accepted_by_center : false,
             price : ' ',
             arrivalAt:' ',
-            image : urlFile,
+            image : 'urlFile',
             paid : false,
             paidAt : ' ',
             isActive: true,
@@ -64,11 +65,11 @@ exports.add_order =  (req, res) =>{
             res.status(400).send({msg:'err'})
           })
         }
-      }else{
-        res.status(400).send({msg:'image is required'})
-      }
+      // }else{
+      //   res.status(400).send({msg:'image is required'})
+      // }
 
-    }
+    // }
 }
 
 async function updatedOrder( player_id ,filter , data , order_id , req , res) {
