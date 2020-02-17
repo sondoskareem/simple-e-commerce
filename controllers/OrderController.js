@@ -42,7 +42,7 @@ exports.add_order =  (req, res) =>{
             accepted_by_center : false,
             price : ' ',
             arrivalAt:' ',
-            image : req.files.file,
+            image : 'req.files.file',
             paid : false,
             paidAt : ' ',
             isActive: true,
