@@ -18,7 +18,7 @@ exports.add_order =  (req, res) =>{
 		msg: validating.error.details[0].message
       })
     }else{
-      if(req.files.file){
+      // if(req.files.file){
       console.log(req.files.file)
       console.log(req.body)
 
@@ -66,9 +66,9 @@ exports.add_order =  (req, res) =>{
           .catch(err =>{
             res.status(400).send({msg:'Wait'})
           })
-        }else{
-        res.status(400).send({msg:'image is required'})
-      }
+      //   }else{
+      //   res.status(400).send({msg:'image is required'})
+      // }
       }
       // else{
       //   res.status(400).send({msg:'image is required'})
