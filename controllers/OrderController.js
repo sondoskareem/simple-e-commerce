@@ -18,8 +18,9 @@ exports.add_order =  (req, res) =>{
 		msg: validating.error.details[0].message
       })
     }else{
-      console.log(req.files.file)
       if(req.files.file){
+      console.log(req.files.file)
+
       //   var file = req.files.file;
       //   var changetype = file.mimetype.split("/", 1);
       //   if (changetype == 'image') {
