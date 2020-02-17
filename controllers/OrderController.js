@@ -19,7 +19,7 @@ exports.add_order =  (req, res) =>{
       })
     }else{
       // if(req.files.file){
-      console.log(req.files.file)
+      // console.log(req.files.file)
       console.log(req.body)
 
       //   var file = req.files.file;
