@@ -12,12 +12,12 @@ const uuidv1 = require('uuid/v1');
 const sendNotification = require('../oneSignal/sendNotification')
 
 exports.add_order =  (req, res) =>{
-	const validating = OrderValidation.order(req.body);
-	if (validating.error) {
-	  res.status(400).send({
-		msg: validating.error.details[0].message
-      })
-    }else{
+	// const validating = OrderValidation.order(req.body);
+	// if (validating.error) {
+	//   res.status(400).send({
+	// 	msg: validating.error.details[0].message
+  //     })
+  //   }else{
       // if(req.files.file){
       // console.log(req.files.file)
       console.log(req.body)
@@ -69,7 +69,7 @@ exports.add_order =  (req, res) =>{
       //   }else{
       //   res.status(400).send({msg:'image is required'})
       // }
-      }
+      // }
       // else{
       //   res.status(400).send({msg:'image is required'})
       // }
