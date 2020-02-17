@@ -19,7 +19,7 @@ exports.add_order =  (req, res) =>{
       })
     }else{
       console.log(req.files.file)
-      // if(req.files.file){
+      if(req.files.file){
       //   var file = req.files.file;
       //   var changetype = file.mimetype.split("/", 1);
       //   if (changetype == 'image') {
@@ -62,10 +62,11 @@ exports.add_order =  (req, res) =>{
               // sendNotification(message);
           })
           .catch(err =>{
-            res.status(400).send({msg:'err'})
+            res.status(400).send({msg:'Wait'})
           })
         }
-      // }else{
+      }
+      // else{
       //   res.status(400).send({msg:'image is required'})
       // }
 
