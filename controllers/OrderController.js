@@ -64,7 +64,9 @@ exports.add_order =  (req, res) =>{
           .catch(err =>{
             res.status(400).send({msg:'Wait'})
           })
-        }
+        }else{
+        res.status(400).send({msg:'image is required'})
+      }
       }
       // else{
       //   res.status(400).send({msg:'image is required'})
