@@ -19,13 +19,19 @@ exports.add_order =  (req, res) =>{
       })
     }else{
       if(req.body.file){
-        console.log(req.body.file)
+        // console.log(req.body.file)
           var FileUud = uuidv1();
+          var img
           var Filepath = "./public/" ;
-      const img = base64Img.img(req.body.file, Filepath, FileUud, function(err, filepath) {
-        if(err =>res.status(400).send({msg:'something wrong with the image'}))
-        console.log('.')
-      });
+          // .imgSync(data, destpath, name)
+          var imgPath = base64Img.imgSync(req.body.file, Filepath, FileUud);
+        var img = imgPath.split('\\', 2)
+      //  base64Img.img(req.body.file, Filepath, FileUud, function(err, filepath) {
+      //   if(err =>res.status(400).send({msg:'something wrong with the image'}))
+      // console.log(img)
+        
+      // });
+      console.log(img[1])
           const order = new Order({
             description:req.body.description,
             phone:req.body.phone,
@@ -37,7 +43,7 @@ exports.add_order =  (req, res) =>{
             accepted_by_center : false,
             price : ' ',
             arrivalAt:' ',
-            image :img,
+            image :img[1],
             paid : false,
             paidAt : ' ',
             isActive: true,
