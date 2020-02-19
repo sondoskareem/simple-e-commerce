@@ -22,7 +22,7 @@ exports.add_order =  (req, res) =>{
         console.log(req.body.file)
           var FileUud = uuidv1();
           var Filepath = "./public/" ;
-      base64Img.img(req.body.file, Filepath, FileUud, function(err, filepath) {
+      const img = base64Img.img(req.body.file, Filepath, FileUud, function(err, filepath) {
         if(err =>res.status(400).send({msg:'something wrong with the image'}))
         console.log('.')
       });
@@ -37,7 +37,7 @@ exports.add_order =  (req, res) =>{
             accepted_by_center : false,
             price : ' ',
             arrivalAt:' ',
-            image : 'req.files.file',
+            image :img,
             paid : false,
             paidAt : ' ',
             isActive: true,
