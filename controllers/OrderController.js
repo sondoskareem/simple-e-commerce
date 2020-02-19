@@ -19,6 +19,7 @@ exports.add_order =  (req, res) =>{
       })
     }else{
       if(req.body.file){
+        console.log(req.body.file)
           var FileUud = uuidv1();
           var Filepath = "./public/" ;
       base64Img.img(req.body.file, Filepath, FileUud, function(err, filepath) {
