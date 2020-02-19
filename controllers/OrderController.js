@@ -21,7 +21,6 @@ exports.add_order =  (req, res) =>{
       if(req.body.file){
         // console.log(req.body.file)
           var FileUud = uuidv1();
-          var img
           var Filepath = "./public/" ;
           // .imgSync(data, destpath, name)
           var imgPath = base64Img.imgSync(req.body.file, Filepath, FileUud);
@@ -31,6 +30,7 @@ exports.add_order =  (req, res) =>{
       // console.log(img)
         
       // });
+      console.log(img)
       console.log(img[1])
           const order = new Order({
             description:req.body.description,
