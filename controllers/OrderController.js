@@ -24,7 +24,7 @@ exports.add_order =  (req, res) =>{
           var Filepath = "./public/" ;
           // .imgSync(data, destpath, name)
           var imgPath = base64Img.imgSync(req.body.file, Filepath, FileUud);
-        var img = imgPath.split(".", 2)
+        var img = imgPath.split("/", 2)
       //  base64Img.img(req.body.file, Filepath, FileUud, function(err, filepath) {
       //   if(err =>res.status(400).send({msg:'something wrong with the image'}))
       // console.log(img)
