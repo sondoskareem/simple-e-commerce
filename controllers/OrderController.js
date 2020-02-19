@@ -10,27 +10,21 @@ const shortid = require('shortid');
 var nodemailer = require('nodemailer');
 const uuidv1 = require('uuid/v1');
 const sendNotification = require('../oneSignal/sendNotification')
-
+var base64Img = require('base64-img');
 exports.add_order =  (req, res) =>{
-	// const validating = OrderValidation.order(req.body);
-	// if (validating.error) {
-	//   res.status(400).send({
-	// 	msg: validating.error.details[0].message
-  //     })
-  //   }else{
-      // if(req.files.file){
-      // console.log(req.files.file)
-      console.log(req.body)
-
-      //   var file = req.files.file;
-      //   var changetype = file.mimetype.split("/", 1);
-      //   if (changetype == 'image') {
-      //     let name = file.name;
-      //     var FileUud = uuidv1();
-      //     const ExtArr = file.mimetype.split("/", 2)
-      //     var Filepath = "./public/" + FileUud + '.' + ExtArr[1];
-      //     var urlFile = FileUud + '.' + ExtArr[1];
-      //     file.mv(Filepath);
+	const validating = OrderValidation.order(req.body);
+	if (validating.error) {
+	  res.status(400).send({
+		msg: validating.error.details[0].message
+      })
+    }else{
+      if(req.body.file){
+          var FileUud = uuidv1();
+          var Filepath = "./public/" ;
+      base64Img.img(req.body.file, Filepath, FileUud, function(err, filepath) {
+        if(err =>res.status(400).send({msg:'something wrong with the image'}))
+        console.log('.')
+      });
           const order = new Order({
             description:req.body.description,
             phone:req.body.phone,
@@ -55,26 +49,23 @@ exports.add_order =  (req, res) =>{
           .then(result =>{
             res.status(200).send({msg:'You\'r request has been sent successfuly' })
             // console.log(result._id)
-              // var message = { 
-              //   "app_id": "b2903fd-3291fc3be",
-              //   "contents": { "en": " Your request has bee" },
-              //   "data": { "data1": result[0]._id},
-              //   "include_player_ids": [req.check_user.player_id],
-              // }
-              // sendNotification(message);
+            //   var message = { 
+            //     "app_id": "b2903fd-3291fc3be",
+            //     "contents": { "en": " Your request has bee" },
+            //     "data": { "data1": result[0]._id},
+            //     "include_player_ids": [req.check_user.player_id],
+            //   }
+            //   sendNotification(message);
           })
           .catch(err =>{
             res.status(400).send({msg:'Wait'})
           })
-      //   }else{
-      //   res.status(400).send({msg:'image is required'})
-      // }
-      // }
-      // else{
-      //   res.status(400).send({msg:'image is required'})
-      // }
+      }
+      else{
+        res.status(400).send({msg:'image is required'})
+      }
 
-    // }
+    }
 }
 
 async function updatedOrder( player_id ,filter , data , order_id , req , res) {

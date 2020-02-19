@@ -10,6 +10,7 @@ exports.order = function (Order) {
         'section_id': Joi.string().required(),
         'createdAt': Joi.string().required(),
         'country_id' :Joi.string().required(),
+        'file' :Joi.string().required(),
     }
     return Joi.validate(Order, OrderSchema);
 }

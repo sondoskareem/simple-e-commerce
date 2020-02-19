@@ -13,12 +13,14 @@ var express = require('express')
 
 
   app.use(bodyParser.urlencoded({
-    extended: false
+    limit: '100mb',
+    extended: true,
+    parameterLimit: 50000
   }))
   // var backup = require('mongodb-backup');
 
   // parse application/json
-  app.use(bodyParser.json())
+  app.use(bodyParser.json({ limit: '100mb' }))
   
   // mongoose.Promise = global.Promise;
   
