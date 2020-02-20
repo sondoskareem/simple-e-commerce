@@ -4,59 +4,65 @@ const mongoose = require('mongoose');
 var moment = require('moment');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/users')
+const Driver = require('../models/driver')
 var UserValidation = require('../validation/UserValidation');
 const config_token = require("../config/token")
+const uuidv1 = require('uuid/v1');
+var base64Img = require('base64-img');
+var check_user = require('../mw/check_user');
 
 
+ function  loadImage(base64String  , req , res){
+	var name = uuidv1();
+	var Filepath = "./public/" ;
+	var imgPath = base64Img.imgSync(base64String, Filepath, name);
+  	var img = imgPath.split("\\", 2)
+	return img[1];
+}
 
-function CreateUser(role , req , res){
-	const validating = UserValidation.new_user(req.body);
+exports.CreateDriver = (req , res)=>{
+	const validating = UserValidation.new_driver(req.body);
 	if (validating.error) {
 	  res.status(400).send({
 		msg: validating.error.details[0].message
 	  })
 	} else {
-		var salt = bcrypt.genSaltSync(10);
-		var hash = bcrypt.hashSync(req.body.password, salt);
-			const user = new Driver({
+		// console.log(loadImage(req.body.id_front , req , res ))
+		
+			const driver = new Driver({
 				_id: new mongoose.Types.ObjectId(),
-				name: req.body.name,
-				phone: req.body.phone,
-				password: hash,
-				email: req.body.email,
-				location: req.body.location,
-				role: role,
-				isActive: true,
-				player_id: req.body.player_id,
-				country_id: req.body.country_id,
+				id_front: loadImage(req.body.id_front , req , res ),
+				id_back: loadImage(req.body.id_back  , req , res),
+				car_type: req.body.car_type,
+				car_model: req.body.car_model,
+				personal_img: loadImage(req.body.personal_img  , req , res),
+				form_img: loadImage(req.body.form_img  , req , res),
+				license_img: loadImage(req.body.license_img  , req , res),
+				user_id : req.check_user._id,
 				createdAt:  moment().format('DD/MM/YYYY'),
 				updateddAt: moment().format('DD/MM/YYYY'),
 			  });
-			  user.save()
+			  driver.save()
 			  .then(result =>{
-				var token = jwt.sign({
-					exp: Math.floor(Date.now() / 1000) + (32832000),
-					id: result._id,
-				  }, config_token);
-				  res.status(200).send({token: token , role:result.role})	
+				//role might be change , but not know
+				  res.status(200).send({data:'Your request has been sent'})	
 					  })
 			  .catch(err =>{
-				var msg
-				if(err.name === 'MongoError' && err.code === 11000){
-				if( err.errmsg.includes("$name_1 dup key")){
-				   msg = "name duplicated"
-				  }else if(err.errmsg.includes("$phone_1 dup key")){
-					 msg = "phone duplicated"
-				 }else if(err.errmsg.includes("$email_1 dup key")){
-				   msg = "email duplicated"
-				  }else{
-					   msg = err
-				  } 
-				}
-				 res.status(400).send({ msg: msg });
+				 res.status(400).send({ msg: 'Somthing wrong try again later ' });
 			  })
 	}  
 
 
+}
+
+exports.getDrivers = async(req , res) =>{
+	await Driver.find({})
+	.populate({ path: 'user_id', populate: { path: 'country_id' } })
+	// .populate('user_id' , 'name phone email location  ')
+	.then(result =>{
+	  res.status(200).send({data:result})
+	})
+	.catch(err =>{
+	  res.status(400).send({msg:'err'})
+	})
 }

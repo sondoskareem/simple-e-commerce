@@ -16,5 +16,16 @@ exports.new_user=function (User) {
     return Joi.validate(User, UserSchema);
 }
 
-    // "bcrypt": "^3.0.6",
-    // "joi": "^14.3.1", 
+exports.new_driver=function (driver) {
+    const driverSchema = {
+        'id_front': Joi.string().required(),
+        'id_back': Joi.string().required(),
+        'car_type': Joi.string().required(),
+        'car_model': Joi.string().required(),
+        'personal_img':Joi.string().required(),
+        'form_img':Joi.string().required(),
+        'license_img' :Joi.string().required(),
+        
+    }
+    return Joi.validate(driver, driverSchema);
+}
