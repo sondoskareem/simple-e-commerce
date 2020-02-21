@@ -6,7 +6,9 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Driver = require('../models/driver')
 var UserValidation = require('../validation/UserValidation');
-const config_token = require("../config/token")
+// const config_token = require("../config/token")
+const config_token = process.env.TOKEN
+
 const uuidv1 = require('uuid/v1');
 var base64Img = require('base64-img');
 var check_user = require('../mw/check_user');
@@ -57,7 +59,7 @@ exports.CreateDriver = (req , res)=>{
 
 exports.getDrivers = async(req , res) =>{
 	await Driver.find({})
-	.populate({ path: 'user_id', populate: { path: 'country_id' } })
+	.populate({ path: 'user_id',  populate: { path: 'country_id' } , select : 'name phone email location  '  })
 	// .populate('user_id' , 'name phone email location  ')
 	.then(result =>{
 	  res.status(200).send({data:result})

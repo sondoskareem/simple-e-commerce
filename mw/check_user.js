@@ -1,6 +1,7 @@
 let User = require("../models/users");
 var jwt = require('jsonwebtoken');
-const config_token = require("../config/token")
+// const config_token = require("../config/token")
+const config_token = process.env.TOKEN
 
 
 exports.check_user= function (req, res, next) {
@@ -31,7 +32,7 @@ exports.check_user= function (req, res, next) {
 		}
 
 		catch (error) {
-			res.send(error)
+			res.status(400).send(error)
 		}
 	} else {
 		res.status(401).send({ msg: 'Unauthorized' })

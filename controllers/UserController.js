@@ -6,7 +6,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users')
 var UserValidation = require('../validation/UserValidation');
-const config_token = require("../config/token")
+// const config_token = require("../config/token")
+const config_token = process.env.TOKEN
 
 function CreateUser(role , req , res){
 	const validating = UserValidation.new_user(req.body);

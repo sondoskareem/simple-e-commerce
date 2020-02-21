@@ -1,6 +1,7 @@
 let User = require("../models/users");
 var jwt = require('jsonwebtoken');
-const config_token = require("../config/token")
+// const config_token = require("../config/token")
+const config_token = process.env.TOKEN
 
 exports.generalUser= function (req, res, next) {
 	var token = req.headers.token
@@ -9,7 +10,7 @@ exports.generalUser= function (req, res, next) {
 					if (err) {
 						res.status(401).send({ msg: 'There\'s something wrong' })
 					}
-					console.log(decoded)
+					// console.log(decoded)
 					User.findOne({_id: decoded.id})
 					.select('name email phone location')
 					.then(user =>{

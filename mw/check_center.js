@@ -1,6 +1,7 @@
 let User = require("../models/users");
 var jwt = require('jsonwebtoken');
-const config_token = require("../config/token")
+// const config_token = require("../config/token")
+const config_token = process.env.TOKEN
 
 
 exports.check_center= function (req, res, next) {

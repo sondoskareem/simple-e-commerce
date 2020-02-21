@@ -13,6 +13,7 @@ module.exports = function(path,app) {
 	var Order = require('../controllers/OrderController');
 	var Country = require('../controllers/CountryController');
 	var Driver = require('../controllers/DriverController');
+	var Charge = require('../controllers/ChargeController');
 	
 	app.route(`${path}/auth/admin`).post(User.CreateAdmin);
 	app.route(`${path}/auth/register`).post(User.create_a_User);
@@ -41,5 +42,8 @@ module.exports = function(path,app) {
 	app.route(`${path}/order/admin`).get(checkLogin_admin.checkLogin_admin, Order.orderForAdmin);
 
 	app.route(`${path}/driver`).post(check_user.check_user, Driver.CreateDriver);
+	app.route(`${path}/driver`).get(checkLogin_admin.checkLogin_admin, Driver.getDrivers);
+
+	app.route(`${path}/charge`).post(check_user.check_user, Charge.charge);
 
 }

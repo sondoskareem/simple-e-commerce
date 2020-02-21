@@ -1,15 +1,16 @@
 var express = require('express')
   app = express()
-  port = process.env.PORT || 8000
   mongoose = require('mongoose')
+  require('dotenv').config();
+  port = process.env.PORT 
+
   const InitiateMongoServer = require("./config/db")
 
   bodyParser = require('body-parser');
   var upload = require('express-fileupload');
   var cors = require('cors');
 
-  //db
-  InitiateMongoServer();
+
 
 
   app.use(bodyParser.urlencoded({
@@ -40,6 +41,10 @@ routes('/api/v1',app);
 app.use(function(req, res) {
   res.status(404).send({url: req.originalUrl + ' not found'})
 });
+
+
+  //db
+  InitiateMongoServer();
 
 
 app.listen(port);
