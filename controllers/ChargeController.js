@@ -19,5 +19,9 @@ exports.charge = (req, res) => {
       currency: 'usd',
       customer: customer.id
     }))
-    .then(charge => res.status(200).send('success'));
+    .then(charge =>{
+
+      
+       res.status(200).send('success')
+      });
   }
