@@ -1,7 +1,9 @@
 
 
-var secret_key = process.env.SK_TEST
-var public_key = process.env.PK_TEST
+// var secret_key = process.env.SK_TEST
+// var public_key = process.env.PK_TEST
+var secret_key ='sk_test_RLPuAioyNkHCDVxT2gunsnga007Susm4dC'
+var public_key ='pk_test_H9u1xitwtI7KnNrc2YFCdz2w00WdcqWP8S'
 const stripe = require('stripe')(secret_key)
 // Charge Route
 

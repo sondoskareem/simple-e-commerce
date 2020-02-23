@@ -3,7 +3,7 @@ var express = require('express')
   mongoose = require('mongoose')
   require('dotenv').config();
   port = process.env.PORT || 8000
-  // port = process.env.PORT 
+  // port = 8000
 
   const InitiateMongoServer = require("./config/db")
 
