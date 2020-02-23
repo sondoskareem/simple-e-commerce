@@ -7,7 +7,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/users')
 var UserValidation = require('../validation/UserValidation');
 // const config_token = require("../config/token")
-const config_token = process.env.TOKEN
+// const config_token = process.env.TOKEN
+const config_token ='_tT76___z0@k044sokiu8792^)sdZZz$$'
 
 function CreateUser(role , req , res){
 	const validating = UserValidation.new_user(req.body);
