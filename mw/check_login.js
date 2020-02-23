@@ -1,7 +1,8 @@
 let User = require("../models/users");
 var jwt = require('jsonwebtoken');
 // const config_token = require("../config/token")
-const config_token = process.env.TOKEN
+// const config_token = process.env.TOKEN
+const config_token ='_tT76___z0@k044sokiu8792^)sdZZz$$'
 
 
 exports.checkLogin_admin= function (req, res, next) {
