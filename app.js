@@ -2,7 +2,8 @@ var express = require('express')
   app = express()
   mongoose = require('mongoose')
   require('dotenv').config();
-  port = process.env.PORT 
+  port = process.env.PORT || 8000
+  // port = process.env.PORT 
 
   const InitiateMongoServer = require("./config/db")
 
