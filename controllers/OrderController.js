@@ -122,43 +122,39 @@ exports.accepted_by_user = async (req, res) =>{
    updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
 }
 
-// exports.orderForCenter = (req , res)=>{
-//   const obj = {
-//     country_id : req.check_center.country_id ,
-//     accepted_by_user:req.query.acceptedByUser ,
-//     accepted_by_center:req.query.acceptedByCenter
-//   }
-//   query(obj , req , res)
-  
-// }
-exports.orderForCenter_id = (req , res)=>{
+exports.orderForCenter = (req , res)=>{
   const obj = {
-    _id : req.query.id,
-    country_id : req.check_center.country_id ,
-    accepted_by_user:req.query.acceptedByUser ,
-    accepted_by_center:req.query.acceptedByCenter
+      country_id : req.check_center.country_id ,
+      accepted_by_user:req.query.acceptedByUser ,
+      accepted_by_center:req.query.acceptedByCenter
   }
-  // console.log(obj)
-  // query(obj , req , res)
+    if(req.query.id){
+      obj._id = req.query.id
+
+  } if(req.query.section_id){
+      obj.section_id = req.query.section_id
+  }
+  query(obj , req , res)
   
 }
 
-exports.orderForAdmin_id = (req , res)=>{
-  const obj = {
-    _id : req.query.id,
-    accepted_by_user:req.query.acceptedByUser ,
-    accepted_by_center:req.query.acceptedByCenter
-  }
-  query(obj , req , res)
-}
 
 exports.orderForAdmin = (req , res)=>{
   const obj = {
     accepted_by_user:req.query.acceptedByUser ,
     accepted_by_center:req.query.acceptedByCenter
   }
+
+  if(req.query.id){
+     obj._id = req.query.id
+
+  }if(req.query.section_id){
+     obj.section_id = req.query.section_id
+  }
+  
   query(obj , req , res)
 }
+
 
 exports.OrderForUser = (req , res)=>{
   const obj = {
@@ -166,25 +162,21 @@ exports.OrderForUser = (req , res)=>{
     accepted_by_user:req.query.acceptedByUser ,
     accepted_by_center:req.query.acceptedByCenter
   }
+  if(req.query.id){
+     obj._id = req.query.id
+  }
+  
   query(obj , req , res)
 }
 
-exports.OrderForUser_id = (req , res)=>{
-  const obj = {
-    _id : req.query.id,
-    user_id : req.check_user._id,
-    accepted_by_user:req.query.acceptedByUser ,
-    accepted_by_center:req.query.acceptedByCenter
-  }
-  query(obj , req , res)
-}
+
 
 
 async function query(params, req , res){
   console.log(params)
   await Order.find(params)
   .populate('country_id' , 'name flag')
-  .select('order1 phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
+  .select('description section_id phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
   .then(result =>{
     res.status(200).send({data:result})
   })
