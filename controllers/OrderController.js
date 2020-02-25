@@ -76,8 +76,10 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
   await Order.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
     if (err) {
       res.status(400).send({msg :'There\'s something wrong , please try again'})
+      console.log(err)
     }
       let playerId 
+      // console.log('doc  ' +doc )
         if(player_id == 'center_player_id'){
           playerId = doc.center_player_id
         }else{
@@ -106,7 +108,7 @@ exports.accepted_by_center = (req , res) =>{
     };
     const order_id = req.body.order_id
     const filter = {_id:order_id}
-    console.log()
+    // console.log(req.check_center.player_id)
    updatedOrder('center_player_id' ,filter , data ,order_id , req , res)
 }
 
