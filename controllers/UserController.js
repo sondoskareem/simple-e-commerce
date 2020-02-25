@@ -131,13 +131,14 @@ exports.loginUser =  (req, res)=> {
 				// 	if (err) {
 				// 		res.status(400).send({msg :'There\'s something wrong , please try again'})
 				// 	}})
-				console.log('req.body.player_id    ' + req.body.player_id)
 				 var token = jwt.sign({
                 exp: Math.floor(Date.now() / 1000) + (32832000),
                 id: result[0]._id,
               },config_token);
 			//  console.log(result[0])
 			// console.log(result[0])
+			console.log('LOGIN req.body.player_id    ' + req.body.player_id)
+
 			  res.status(200).send({token: token , role:result[0].role})
 			}
 			else{res.status(401).send({msg:'You must first confirm your phone number'})}
