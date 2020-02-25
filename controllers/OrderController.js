@@ -79,7 +79,7 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
       console.log(err)
     }
       let playerId 
-      // console.log('doc  ' +doc )
+      console.log('doc  ' +doc )
         if(player_id == 'center_player_id'){
           playerId = doc.center_player_id
         }else{
@@ -108,7 +108,8 @@ exports.accepted_by_center = (req , res) =>{
     };
     const order_id = req.body.order_id
     const filter = {_id:order_id}
-    // console.log(req.check_center.player_id)
+    console.log('order_id  ' + req.body.order_id )
+    console.log( 'req.check_center.player_id   ' + req.check_center.player_id)
    updatedOrder('center_player_id' ,filter , data ,order_id , req , res)
 }
 
