@@ -125,19 +125,19 @@ exports.loginUser =  (req, res)=> {
              if(result[0].isActive){ 
 				// console.log('result')
 
-				const filter = { phone: req.body.phone };
-				const data = { player_id: req.body.player_id };
-				User.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
-					if (err) {
-						res.status(400).send({msg :'There\'s something wrong , please try again'})
-					}})
-				// console.log('result')
+				// const filter = { phone: req.body.phone };
+				// const data = { player_id: req.body.player_id };
+				// User.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
+				// 	if (err) {
+				// 		res.status(400).send({msg :'There\'s something wrong , please try again'})
+				// 	}})
+				console.log('req.body.player_id    ' + req.body.player_id)
 				 var token = jwt.sign({
                 exp: Math.floor(Date.now() / 1000) + (32832000),
                 id: result[0]._id,
               },config_token);
 			//  console.log(result[0])
-			console.log(result[0])
+			// console.log(result[0])
 			  res.status(200).send({token: token , role:result[0].role})
 			}
 			else{res.status(401).send({msg:'You must first confirm your phone number'})}
