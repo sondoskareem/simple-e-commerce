@@ -73,27 +73,30 @@ exports.add_order =  (req, res) =>{
 }
 
 async function updatedOrder( player_id ,filter , data , order_id , req , res) {
-  // await Order.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
-  //   if (err) {
-  //     res.status(400).send({msg :'There\'s something wrong , please try again'})
-  //     console.log(err)
-  //   }
-  //     let playerId 
-  //     console.log('doc  ' +doc )
-  //       if(player_id == 'center_player_id'){
-  //         playerId = doc.center_player_id
-  //       }else{
-  //         playerId = doc.user_player_id
-  //       }
-              // var message = { 
-              //   "app_id": "b2903fd-3291fc3be",
-              //   "contents": { "en": " Your request has bee" },
-              //   "data": { "data1": order_id},
-              //   "include_player_ids": [playerId],
-              // }
-              // sendNotification(message);
+  await Order.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
+    if (err) {
+      res.status(400).send({msg :'There\'s something wrong , please try again'})
+      console.log(err)
+    }if(doc){
+      let playerId 
+      console.log('doc  ' +doc )
+        if(player_id == 'center_player_id'){
+          playerId = doc.center_player_id
+        }else{
+          playerId = doc.user_player_id
+        }
+              var message = { 
+                "app_id": "b2903fd-3291fc3be",
+                "contents": { "en": " Your request has bee" },
+                "data": { "data1": order_id},
+                "include_player_ids": [playerId],
+              }
+              sendNotification(message);
     res.status(200).send({data :'request has been sent'})
-//   });
+    }else{
+      res.status(400).send({msg:'There\'s something wrong , please try again'})
+    }
+  });
 }
 
 // async function getOrder(user_id , filter){
