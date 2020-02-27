@@ -19,7 +19,10 @@ var check_user = require('../mw/check_user');
 	var name = uuidv1();
 	var Filepath = "./public/" ;
 	var imgPath = base64Img.imgSync(base64String, Filepath, name);
-  	var img = imgPath.split("\\", 2)
+          //local \\ , on server must split on /
+
+	  var img = imgPath.split("/", 2)
+	  console.log(' oo   '+img[1])
 	return img[1];
 }
 

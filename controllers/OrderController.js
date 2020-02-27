@@ -24,10 +24,11 @@ exports.add_order =  (req, res) =>{
           var name = uuidv1();
           var Filepath = "./public/" ;
           var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
+          //local \\ , on server must split on /
         var img = imgPath.split("/", 2)
      
       console.log(img)
-      console.log(img[1])
+      // console.log(img[1])
       //MW check if there is callcenter with the requested country_id to return all users with 
           const order = new Order({
             description:req.body.description,
@@ -49,6 +50,7 @@ exports.add_order =  (req, res) =>{
             createdAt: req.body.createdAt,
             updateddAt: req.body.createdAt,
           })
+          // console.log(order)
           order.save()
           .then(result =>{
             res.status(200).send({msg:'You\'r request has been sent successfuly' })
