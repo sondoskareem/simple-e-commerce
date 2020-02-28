@@ -7,7 +7,8 @@ var base64Img = require('base64-img');
 
 exports.add_country = (req , res)=>{
     if(req.body.file){
-            console.log(req.body.file)
+      console.log(req.body)
+            // console.log(req.body.file)
           var name = uuidv1();
           Filepath = "./public/" ;
           var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
