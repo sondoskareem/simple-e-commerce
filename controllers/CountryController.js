@@ -6,6 +6,7 @@ const uuidv1 = require('uuid/v1');
 
 exports.add_country = (req , res)=>{
     if(req.files.file){
+      console.log('imag            '+req.files.file)
         var file = req.files.file;
         var changetype = file.mimetype.split("/", 1);
         if (changetype == 'image') {
