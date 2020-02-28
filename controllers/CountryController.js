@@ -10,7 +10,7 @@ exports.add_country = (req , res)=>{
       console.log(req.body)
             // console.log(req.body.file)
           var name = uuidv1();
-          Filepath = "./public/" ;
+          var Filepath = "./public/" ;
           var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
           //local \\ , on server must split on /
           var img = imgPath.split("/", 2)
