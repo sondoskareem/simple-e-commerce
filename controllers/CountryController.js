@@ -3,23 +3,21 @@ const mongoose = require('mongoose');
 var moment = require('moment');
 const Country = require('../models/country')
 const uuidv1 = require('uuid/v1');
+var base64Img = require('base64-img');
 
 exports.add_country = (req , res)=>{
-    if(req.files.file){
-      console.log('imag            '+req.files.file)
-        var file = req.files.file;
-        var changetype = file.mimetype.split("/", 1);
-        if (changetype == 'image') {
-          let name = file.name;
-          var FileUud = uuidv1();
-          const ExtArr = file.mimetype.split("/", 2)
-          var Filepath = "./public/" + FileUud + '.' + ExtArr[1];
-          var urlFile = FileUud + '.' + ExtArr[1];
-          file.mv(Filepath);
+    if(req.body.file){
+            console.log(req.body.file)
+          var name = uuidv1();
+          Filepath = "./public/" ;
+          var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
+          //local \\ , on server must split on /
+          var img = imgPath.split("/", 2)
+          console.log('image url   ' + img[1])
         const country = new Country({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
-            flag:urlFile,
+            flag:img[1],
             isActive: true,
             createdAt:  moment().format('DD/MM/YYYY'),
             updateddAt: moment().format('DD/MM/YYYY'),
@@ -31,7 +29,7 @@ exports.add_country = (req , res)=>{
         .catch(err =>{
             res.status(400).send({msg:'Somthing went wrong'})
         })
-      }
+      
     }else{
         res.status(400).send({msg:'image is required'})
     }
