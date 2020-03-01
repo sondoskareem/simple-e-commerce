@@ -189,6 +189,7 @@ async function query(params, req , res){
   console.log(params)
   await Order.find(params)
   .populate('country_id' , 'name flag')
+  .populate('section_id' , 'image description')
   .select('description section_id phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
   .then(result =>{
     res.status(200).send({data:result})
