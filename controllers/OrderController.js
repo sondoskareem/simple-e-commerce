@@ -155,10 +155,15 @@ exports.orderForAdmin = (req , res)=>{
 
   if(req.query.id){
      obj._id = req.query.id
+  }
 
-  }if(req.query.section_id){
+  if(req.query.section_id){
      obj.section_id = req.query.section_id
   }
+  
+  if(req.query.country_id){
+  obj.country_id = req.query.country_id
+}
   
   query(obj , req , res)
 }

@@ -39,8 +39,18 @@ function CreateUser(role , req , res){
 					exp: Math.floor(Date.now() / 1000) + (32832000),
 					id: result._id,
 				  }, config_token);
-				  res.status(200).send({token: token , role:result.role})	
-					  })
+				  
+				  var obj = {
+					token:token,
+					role:result.role,
+					user:{
+						name:result.name,
+						email:result.email,
+						phone:result.phone
+					}
+				  }
+				res.status(200).send(obj)	
+					})
 			  .catch(err =>{
 				var msg
 				if(err.name === 'MongoError' && err.code === 11000){
@@ -138,8 +148,16 @@ exports.loginUser =  (req, res)=> {
 			//  console.log(result[0])
 			// console.log(result[0])
 			console.log('LOGIN req.body.player_id    ' + req.body.player_id)
-
-			  res.status(200).send({token: token , role:result[0].role})
+			  var obj = {
+				token:token,
+				role:result[0].role,
+				user:{
+				name:result[0].name,
+				email:result[0].email,
+				phone:result[0].phone
+			}
+			  }
+			  res.status(200).send(obj)
 			}
 			else{res.status(401).send({msg:'You must first confirm your phone number'})}
 
