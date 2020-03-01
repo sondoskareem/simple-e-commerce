@@ -11,6 +11,10 @@ const SectionSchema = mongoose.Schema({
     type: Boolean,
     required: true
   },
+  image: {
+    type: String,
+    required: true
+  },
   createdAt: {
     type: String,
     required: true
