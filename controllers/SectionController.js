@@ -62,7 +62,7 @@ exports.update = async(req , res) => {
 }
 exports.get_section = async(req , res)=>{
 	Sections.find({isActive:true})
-	.select('description')
+	.select('description image')
 	.then(result =>{
 		res.status(200).send({data:result})
 	})
