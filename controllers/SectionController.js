@@ -4,6 +4,7 @@ var moment = require('moment');
 const Sections = require('../models/sections')
 const uuidv1 = require('uuid/v1');
 var base64Img = require('base64-img');
+
 exports.add_section = (req , res)=>{
 	if(req.body.file){
         // console.log(req.body.file)
@@ -32,26 +33,32 @@ exports.add_section = (req , res)=>{
 }
 
 exports.update = async(req , res) => {
-	if(!req.body.description){
-		res.send.status(400).send({msg :'Please inter the required field'})
+	const data = {}
+	if(req.body.file){
+		var name = uuidv1();
+		var Filepath = "./public/" ;
+		var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
+		//local \\ , on server must split on /
+	  	var img = imgPath.split("/", 2)
+			data.image=img[1] 
 
-	}else{
-		const data = { 
-			description: req.body.description ,
-			updateddAt: moment().format('DD/MM/YYYY')
-			};
-			const filter = { _id:req.body.section_id }
+	}
 
+	if(req.body.description){
+		data.description = req.body.description 
+		data.updateddAt = moment().format('DD/MM/YYYY')
+		}
+
+		const filter = { _id:req.body.section_id }
 		await Sections.findOneAndUpdate(filter, data, {
 			new: true
 		  } ,  (err, doc) => {
-			if (err) {
 				res.status(400).send({msg :'There\'s something wrong , please try again'})
+			if(doc){
+				res.status(200).send({data : 'Done'})
 			}
-		
-			res.status(200).send({data : 'Done'})
 		});
-	}
+	
 }
 exports.get_section = async(req , res)=>{
 	Sections.find({isActive:true})
