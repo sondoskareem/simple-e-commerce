@@ -2,10 +2,11 @@
 const mongoose = require("mongoose");
 
 const OrderSchema = mongoose.Schema({
-  // rejected_by_center: {
-  //   type: Boolean,
-  //   required: true
-  // },
+  rejected_by_center: {
+    type: Boolean,
+    required: true
+  },
+  
 	description: {
     type: String,
     required: true

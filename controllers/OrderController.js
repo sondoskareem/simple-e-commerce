@@ -11,6 +11,7 @@ var nodemailer = require('nodemailer');
 const uuidv1 = require('uuid/v1');
 const sendNotification = require('../oneSignal/sendNotification')
 var base64Img = require('base64-img');
+const querystring = require('query-string');
 
 exports.add_order =  (req, res) =>{
 	const validating = OrderValidation.order(req.body);
@@ -37,6 +38,7 @@ exports.add_order =  (req, res) =>{
             user_id : req.check_user._id,
             section_id : req.body.section_id,
             country_id : req.body.country_id,
+            rejected_by_center:false,
             accepted_by_user : false,
             accepted_by_center : false,
             price : ' ',
@@ -127,18 +129,22 @@ exports.accepted_by_user = async (req, res) =>{
     const order_id = req.body.order_id
     const filter = {_id:order_id}
     // console.log()
-   updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
+    updatedOrder('center_player_id' ,filter , data ,order_id , req , res)
 }
 
-// exports.rejected_by_center = async(req , res)=>{
-//   const data = { 
-//     rejected_by_center: true ,
-//     };
-//     const order_id = req.body.order_id
-//     const filter = {_id:order_id}
-//     // console.log()
-//    updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
-// }
+exports.rejected_by_center = async(req , res)=>{
+  const data = { 
+    rejected_by_center: true,
+    accepted_by_center:false,
+    price:' ',
+    arrivalAt: ' ',
+
+    };
+    const order_id = req.body.order_id
+    const filter = {_id:order_id}
+    // console.log()
+   updatedOrder('center_player_id' ,filter , data ,order_id , req , res)
+}
 
 exports.orderForCenter = (req , res)=>{
   const obj = {
@@ -161,21 +167,17 @@ exports.orderForAdmin = (req , res)=>{
   const obj = {
     accepted_by_user:req.query.acceptedByUser ,
     accepted_by_center:req.query.acceptedByCenter
-  }
-
+}
   if(req.query.id){
-     obj._id = req.query.id
-  }
+    obj._id = req.query.id
 
-  if(req.query.section_id){
-     obj.section_id = req.query.section_id
-  }
-  
-  if(req.query.country_id){
+} if(req.query.section_id){
+    obj.section_id = req.query.section_id
+}
+if(req.query.country_id){
   obj.country_id = req.query.country_id
 }
-  
-  query(obj , req , res)
+query(obj , req , res)
 }
 
 
@@ -188,15 +190,54 @@ exports.OrderForUser = (req , res)=>{
   if(req.query.id){
      obj._id = req.query.id
   }
+  else if(req.query.rejected_by_center){
+    obj._id = req.query.rejected_by_center
+  }
   
   query(obj , req , res)
 }
 
 
 
+exports.OrderTimeZoneForAdmin = (req , res)=>{
+  Order.find({createdAt: { $gt: req.query.greater, $lt: req.query.smaller }})
+  // limit(10).
+  // sort({ occupation: -1 }).
+  .populate('country_id' , 'name flag')
+  .populate('section_id' , 'image description')
+  .select('description section_id phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
+  .then(result =>{
+    res.status(200).send({data:result})
+  })
+  .catch(err =>{
+    res.status(400).send({msg:'err'})
+  })
+}     
 
+
+exports.Subtraction_OrderTimeZoneForAdmin = (req , res)=>{
+    
+ var a =  moment((new Date(req.query.greater)));
+  var b = moment((new Date(req.query.smaller)));
+
+
+// var a = moment('2016-06-06T21:03:55');//now ***********
+// var b = moment('2016-05-06T20:03:55');************
+// console.log(a.diff(b, 'minutes')) // 44700********
+// console.log(a.diff(b, 'hours')) // 745**********
+// console.log(a.diff(b, 'days')) // 31
+// console.log(a.diff(b, 'weeks'))
+let obj = {
+  minutes : a.diff(b, 'minutes'),
+  hours : a.diff(b, 'hours'),
+  days : a.diff(b, 'days'),
+  weeks : a.diff(b, 'weeks'),
+}
+res.status(200).send({obj})
+}
+//param validation
 async function query(params, req , res){
-  console.log(params)
+  console.log(params) 
   await Order.find(params)
   .populate('country_id' , 'name flag')
   .populate('section_id' , 'image description')

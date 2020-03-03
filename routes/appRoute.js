@@ -35,6 +35,7 @@ module.exports = function(path,app) {
 
 	app.route(`${path}/order/create`).post(check_user.check_user, Order.add_order);
 	app.route(`${path}/order/acceptedByCenter`).post(check_center.check_center, Order.accepted_by_center);
+	app.route(`${path}/order/rejectedByCenter`).post(check_center.check_center, Order.rejected_by_center);
 	app.route(`${path}/order/acceptedByUser`).post(check_user.check_user, Order.accepted_by_user);
 
 	app.route(`${path}/order/center`).get(check_center.check_center, Order.orderForCenter);
@@ -42,6 +43,8 @@ module.exports = function(path,app) {
 	app.route(`${path}/order/user`).get(check_user.check_user, Order.OrderForUser);
 
 	app.route(`${path}/order/admin`).get(checkLogin_admin.checkLogin_admin, Order.orderForAdmin);
+	app.route(`${path}/order/timeZone`).get(checkLogin_admin.checkLogin_admin, Order.OrderTimeZoneForAdmin);
+	app.route(`${path}/order/timePeriod`).get(checkLogin_admin.checkLogin_admin, Order.Subtraction_OrderTimeZoneForAdmin);
 
 	app.route(`${path}/driver`).post(check_user.check_user, Driver.CreateDriver);
 	app.route(`${path}/driver`).get(checkLogin_admin.checkLogin_admin, Driver.getDrivers);
