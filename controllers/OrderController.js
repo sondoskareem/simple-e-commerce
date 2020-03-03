@@ -87,13 +87,13 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
         }else{
           playerId = doc.user_player_id
         }
-              var message = { 
-                "app_id": "b2903fd-3291fc3be",
-                "contents": { "en": " Your request has bee" },
-                "data": { "data1": order_id},
-                "include_player_ids": [playerId],
-              }
-              sendNotification(message);
+              // var message = { 
+              //   "app_id": "b2903fd-3291fc3be",
+              //   "contents": { "en": " Your request has bee" },
+              //   "data": { "data1": order_id},
+              //   "include_player_ids": [playerId],
+              // }
+              // sendNotification(message);
     res.status(200).send({data :'request has been sent'})
     }else{
       res.status(400).send({msg:'There\'s something wrong , please try again'})
@@ -129,6 +129,16 @@ exports.accepted_by_user = async (req, res) =>{
     // console.log()
    updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
 }
+
+// exports.rejected_by_center = async(req , res)=>{
+//   const data = { 
+//     rejected_by_center: true ,
+//     };
+//     const order_id = req.body.order_id
+//     const filter = {_id:order_id}
+//     // console.log()
+//    updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
+// }
 
 exports.orderForCenter = (req , res)=>{
   const obj = {
