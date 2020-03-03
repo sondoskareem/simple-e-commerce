@@ -79,6 +79,10 @@ const OrderSchema = mongoose.Schema({
     type: Boolean,
     required: true
   },
+  center_approvedAt: {
+    type: String,
+    required: true
+  },
   createdAt: {
     type: String,
     required: true

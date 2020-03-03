@@ -41,6 +41,7 @@ exports.add_order =  (req, res) =>{
             rejected_by_center:false,
             accepted_by_user : false,
             accepted_by_center : false,
+            center_approvedAt:' ',
             price : ' ',
             arrivalAt:' ',
             image :img[1],
@@ -111,6 +112,7 @@ exports.accepted_by_center = (req , res) =>{
     accepted_by_center: req.body.accepted_by_center ,
     price: req.body.price ,
     arrivalAt: req.body.arrivalAt ,
+    center_approvedAt: req.body.center_approvedAt ,
     center_player_id:req.check_center.player_id
     };
     const order_id = req.body.order_id
@@ -164,10 +166,11 @@ exports.orderForCenter = (req , res)=>{
 
 
 exports.orderForAdmin = (req , res)=>{
-  const obj = {
-    accepted_by_user:req.query.acceptedByUser ,
-    accepted_by_center:req.query.acceptedByCenter
-}
+  const obj ={}
+// = {
+//     accepted_by_user:req.query.acceptedByUser ,
+//     accepted_by_center:req.query.acceptedByCenter
+// }
   if(req.query.id){
     obj._id = req.query.id
 
@@ -177,9 +180,18 @@ exports.orderForAdmin = (req , res)=>{
 if(req.query.country_id){
   obj.country_id = req.query.country_id
 }
+if(req.query.acceptedByUser){
+  obj.accepted_by_user = req.query.acceptedByUser
+}
+if(req.query.acceptedByCenter){
+  obj.accepted_by_center = req.query.acceptedByCenter
+}
+if(req.query.rejectedByCenter){
+  obj.rejected_by_center = req.query.rejectedByCenter
+}
 query(obj , req , res)
 }
-
+  
 
 exports.OrderForUser = (req , res)=>{
   const obj = {
