@@ -43,7 +43,7 @@ exports.update = async(req , res) => {
 			data.image=img[1] 
 
 	}
-
+	
 	 if(req.body.description){
 		data.description = req.body.description 
 		data.updateddAt = moment().format('DD/MM/YYYY')
@@ -64,7 +64,6 @@ exports.update = async(req , res) => {
 			}
 			else{
 				res.status(400).send({msg :'There\'s something wrong , please try again'})
-
 			}
 		});
 	
