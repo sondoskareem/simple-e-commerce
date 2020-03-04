@@ -87,7 +87,7 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
       console.log('doc  ' +doc )
         if(player_id == 'center_player_id'){
           playerId = doc.center_player_id
-        }else{
+        }else if('user_player_id'){ 
           playerId = doc.user_player_id
         }
               // var message = { 
@@ -119,7 +119,7 @@ exports.accepted_by_center = (req , res) =>{
     const filter = {_id:order_id}
     console.log('acceptedByCenter  ' + req.body )
     // console.log( 'req.check_center.player_id   ' + req.check_center.player_id)
-   updatedOrder('center_player_id' ,filter , data ,order_id , req , res)
+   updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
 }
 
 exports.accepted_by_user = async (req, res) =>{
@@ -145,7 +145,7 @@ exports.rejected_by_center = async(req , res)=>{
     const order_id = req.body.order_id
     const filter = {_id:order_id}
     // console.log()
-   updatedOrder('center_player_id' ,filter , data ,order_id , req , res)
+   updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
 }
 
 exports.orderForCenter = (req , res)=>{
@@ -217,7 +217,7 @@ exports.OrderTimeZoneForAdmin = (req , res)=>{
   // sort({ occupation: -1 }).
   .populate('country_id' , 'name flag')
   .populate('section_id' , 'image description')
-  .select('description section_id phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
+  .select('description center_approvedAt section_id phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
   .then(result =>{
     res.status(200).send({data:result})
   })
@@ -253,7 +253,7 @@ async function query(params, req , res){
   await Order.find(params)
   .populate('country_id' , 'name flag')
   .populate('section_id' , 'image description')
-  .select('description section_id phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
+  .select('description center_approvedAt section_id phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
   .then(result =>{
     res.status(200).send({data:result})
   })
