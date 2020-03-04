@@ -44,18 +44,27 @@ exports.update = async(req , res) => {
 
 	}
 
-	if(req.body.description){
+	 if(req.body.description){
 		data.description = req.body.description 
 		data.updateddAt = moment().format('DD/MM/YYYY')
+		}
+		else{
+			res.status(400).send({msg :'There\'s something wrong , please try again'})
 		}
 
 		const filter = { _id:req.body.section_id }
 		await Sections.findOneAndUpdate(filter, data, {
 			new: true
 		  } ,  (err, doc) => {
+			  if(err){
 				res.status(400).send({msg :'There\'s something wrong , please try again'})
+			  }
 			if(doc){
 				res.status(200).send({data : 'Done'})
+			}
+			else{
+				res.status(400).send({msg :'There\'s something wrong , please try again'})
+
 			}
 		});
 	
