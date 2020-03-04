@@ -41,9 +41,8 @@ exports.update = async(req , res) => {
 		//local \\ , on server must split on /
 	  	var img = imgPath.split("/", 2)
 			data.image=img[1] 
-
 	}
-	
+
 	 if(req.body.description){
 		data.description = req.body.description 
 		data.updateddAt = moment().format('DD/MM/YYYY')
