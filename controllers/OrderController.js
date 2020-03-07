@@ -252,7 +252,7 @@ res.status(200).send({obj})
 }
 //param validation
 async function query(params, req , res){
-  console.log(params) 
+  // console.log(params) 
   await Order.find(params)
   .populate('country_id' , 'name flag')
   .populate('section_id' , 'image description')
