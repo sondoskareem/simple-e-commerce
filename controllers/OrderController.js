@@ -130,8 +130,9 @@ exports.accepted_by_user = async (req, res) =>{
     };
     const order_id = req.body.order_id
     const filter = {_id:order_id}
-    // console.log()
-    updatedOrder('center_player_id' ,filter , data ,order_id , req , res)
+    console.log(req.body)
+    res.status(200).send({data:'Test'})
+    // updatedOrder('center_player_id' ,filter , data ,order_id , req , res)
 }
 
 exports.rejected_by_center = async(req , res)=>{
@@ -152,7 +153,8 @@ exports.orderForCenter = (req , res)=>{
   const obj = {
       country_id : req.check_center.country_id ,
       accepted_by_user:req.query.acceptedByUser ,
-      accepted_by_center:req.query.acceptedByCenter
+      accepted_by_center:req.query.acceptedByCenter,
+      rejected_by_center:false
   }
     if(req.query.id){
       obj._id = req.query.id
@@ -197,7 +199,8 @@ exports.OrderForUser = (req , res)=>{
   const obj = {
     user_id : req.check_user._id,
     accepted_by_user:req.query.acceptedByUser ,
-    accepted_by_center:req.query.acceptedByCenter
+    accepted_by_center:req.query.acceptedByCenter,
+    rejected_by_center:false
   }
   if(req.query.id){
      obj._id = req.query.id
