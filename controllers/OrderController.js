@@ -26,11 +26,10 @@ exports.add_order =  (req, res) =>{
           var Filepath = "./public/" ;
           var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
           //local \\ , on server must split on /
-        var img = imgPath.split("/", 2)
+        var img = imgPath.split("\\", 2)
      
       console.log(img)
       // console.log(img[1])
-      //MW check if there is callcenter with the requested country_id to return all users with 
           const order = new Order({
             description:req.body.description,
             phone:req.body.phone,
@@ -56,6 +55,9 @@ exports.add_order =  (req, res) =>{
           // console.log(order)
           order.save()
           .then(result =>{
+              console.log(req.check_country)
+              console.log(req.check_section._id)
+
             res.status(200).send({msg:'You\'r request has been sent successfuly' })
             // console.log(result._id)
             //   var message = { 
@@ -155,6 +157,7 @@ exports.orderForCenter = (req , res)=>{
       accepted_by_user:req.query.acceptedByUser ,
       accepted_by_center:req.query.acceptedByCenter,
       // rejected_by_center:false
+      isActive:true
   }
     if(req.query.id){
       obj._id = req.query.id
@@ -168,7 +171,7 @@ exports.orderForCenter = (req , res)=>{
 
 
 exports.orderForAdmin = (req , res)=>{
-  const obj ={}
+  const obj ={isActive:true}
 // = {
 //     accepted_by_user:req.query.acceptedByUser ,
 //     accepted_by_center:req.query.acceptedByCenter
@@ -200,7 +203,8 @@ exports.OrderForUser = (req , res)=>{
     user_id : req.check_user._id,
     // accepted_by_user:req.query.acceptedByUser ,
     // accepted_by_center:req.query.acceptedByCenter,
-    rejected_by_center:false
+    rejected_by_center:false,
+    isActive:true
   }
   if(req.query.acceptedByUser){
     obj.accepted_by_user = req.query.acceptedByUser 
@@ -221,7 +225,7 @@ exports.OrderForUser = (req , res)=>{
 
 
 exports.OrderTimeZoneForAdmin = (req , res)=>{
-  Order.find({createdAt: { $gt: req.query.greater, $lt: req.query.smaller }})
+  Order.find({createdAt: { $gt: req.query.greater, $lt: req.query.smaller }  , isActive:true })
   // limit(10).
   // sort({ occupation: -1 }).
   .populate('country_id' , 'name flag')
@@ -256,6 +260,9 @@ let obj = {
 }
 res.status(200).send({obj})
 }
+
+
+
 //param validation
 async function query(params, req , res){
   // console.log(params) 
@@ -270,4 +277,5 @@ async function query(params, req , res){
     res.status(400).send({msg:'err'})
   })
 }
+
 

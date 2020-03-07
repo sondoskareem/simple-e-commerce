@@ -12,7 +12,7 @@ exports.generalUser= function (req, res, next) {
 						res.status(401).send({ msg: 'There\'s something wrong' })
 					}
 					// console.log(decoded)
-					User.findOne({_id: decoded.id})
+					User.findOne({_id: decoded.id  , isActive:true})
 					.select('name email phone location')
 					.then(user =>{
 						req.generalUser = user

@@ -47,7 +47,7 @@ exports.update = async(req , res) => {
 			name: req.body.name ,
 			updateddAt: moment().format('DD/MM/YYYY')
 			};
-			const filter = { _id:req.body.id }
+			const filter = { _id:req.body.id ,isActive:true}
 
 		await Country.findOneAndUpdate(filter, data, {
 			new: true
@@ -69,4 +69,19 @@ exports.get_country = async(req , res)=>{
 	.catch(err =>{
 		res.status(400).send({msg:'err'})
 	})
+}
+
+exports.CountryInactive = async(req , res)=>{
+	if(req.body.id){
+		const filter = { _id: req.body.id };
+		const data = { isActive: false };
+		Country.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
+			if (err) {
+				res.status(400).send({msg :'There\'s something wrong , please try again'})
+			}
+			if(doc){
+				res.status(200).send({msg:' Country has been suspended'})
+			}
+		})
+	}
 }

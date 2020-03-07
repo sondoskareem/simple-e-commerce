@@ -17,7 +17,9 @@ exports.check_user= function (req, res, next) {
 					}
 					User.findOne({
 						_id: decoded.id
-					}, (err, user) => {
+						, isActive:true
+					}
+					, (err, user) => {
 						if (err) {
 							res.status(401).send({ msg: err })
 						}

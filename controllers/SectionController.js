@@ -49,7 +49,7 @@ exports.update = (req , res) => {
 		}
 	
 		console.log(data)
-		const filter = { _id:req.body.section_id }
+		const filter = { _id:req.body.section_id , isActive:true }
 		updateSection(req , res , data , filter)
 }
 
@@ -81,13 +81,17 @@ exports.get_section = async(req , res)=>{
 	})
 }
 
-// {
-// 	image: '0119fc20-5e56-11ea-94b1-e1256606c371.gif',
-// 	updateddAt: '04/03/2020'
-// }
-
-// {
-// 	image: '23802320-5e56-11ea-bf86-cbe28c3489b9.gif',
-// 	description: 'Spare Parts',
-// 	updateddAt: '04/03/2020'
-// }
+exports.SectionInactive = async(req , res)=>{
+	if(req.body.id){
+		const filter = { _id: req.body.id };
+		const data = { isActive: false };
+		Sections.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
+			if (err) {
+				res.status(400).send({msg :'There\'s something wrong , please try again'})
+			}
+			if(doc){
+				res.status(200).send({msg:' Section has been suspended	'})
+			}
+		})
+	}
+}

@@ -16,6 +16,7 @@ exports.checkLogin_admin= function (req, res, next) {
 					}
 					User.findOne({
 						_id: decoded.id
+						, isActive:true
 					}, (err, user) => {
 						if (err) {
 							res.status(401).send({ msg: err })

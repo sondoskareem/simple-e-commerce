@@ -6,6 +6,8 @@ module.exports = function(path,app) {
     var checkLogin_admin = require('../mw/check_login');
     var check_user = require('../mw/check_user');
     var check_center = require('../mw/check_center');
+    var check_country = require('../mw/check_country');
+    var check_section = require('../mw/check_section');
     var generalUser = require('../mw/generalUser');
     
 	var User = require('../controllers/UserController');
@@ -33,7 +35,11 @@ module.exports = function(path,app) {
 	app.route(`${path}/country`).get( Country.get_country);
 	app.route(`${path}/country/update`).post(checkLogin_admin.checkLogin_admin, Country.update);
 
-	app.route(`${path}/order/create`).post(check_user.check_user, Order.add_order);
+	app.route(`${path}/country/suspend`).post(checkLogin_admin.checkLogin_admin, Country.CountryInactive);
+	app.route(`${path}/user/suspend`).post(checkLogin_admin.checkLogin_admin, User.UserInactive);
+	app.route(`${path}/section/suspend`).post(checkLogin_admin.checkLogin_admin, Section.SectionInactive);
+
+	app.route(`${path}/order/create`).post(check_user.check_user,check_country.check_country,check_section.check_section, Order.add_order);
 	app.route(`${path}/order/acceptedByCenter`).post(check_center.check_center, Order.accepted_by_center);
 	app.route(`${path}/order/rejectedByCenter`).post(check_center.check_center, Order.rejected_by_center);
 	app.route(`${path}/order/acceptedByUser`).post(check_user.check_user, Order.accepted_by_user);

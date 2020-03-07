@@ -125,7 +125,7 @@ exports.create_a_CenterCallUser = (req , res)=>{
 }
 exports.loginUser =  (req, res)=> {
 	if (req.body.phone && req.body.password) {
-		  User.find({ phone: req.body.phone })
+		  User.find({ phone: req.body.phone , isActive:true})
 			.then(result => {
 				// console.log(result)
 
@@ -135,12 +135,12 @@ exports.loginUser =  (req, res)=> {
              if(result[0].isActive){ 
 				// console.log('result')
 
-				// const filter = { phone: req.body.phone };
-				// const data = { player_id: req.body.player_id };
-				// User.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
-				// 	if (err) {
-				// 		res.status(400).send({msg :'There\'s something wrong , please try again'})
-				// 	}})
+				const filter = { phone: req.body.phone };
+				const data = { player_id: req.body.player_id };
+				User.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
+					if (err) {
+						res.status(400).send({msg :'There\'s something wrong , please try again'})
+					}})
 				 var token = jwt.sign({
                 exp: Math.floor(Date.now() / 1000) + (32832000),
                 id: result[0]._id,
@@ -202,7 +202,7 @@ exports.changePassword = async(req , res) => {
 // && req.query.role == 3
 exports.users = async(req , res) => {
 	if(req.query.role == 1 || req.query.role == 0 ){
-		await User.find({role:req.query.role})
+		await User.find({role:req.query.role , isActive:true})
 		.select(' name country_id phone email location')
 		.populate('country_id')
 	   .then(data =>{
@@ -217,9 +217,20 @@ exports.users = async(req , res) => {
 	
 }
 
-// exports.UserInactive = async(req , res)=>{
-
-// }
+exports.UserInactive = async(req , res)=>{
+if(req.body.id){
+	const filter = { _id: req.body.id };
+	const data = { isActive: false };
+	User.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
+		if (err) {
+			res.status(400).send({msg :'There\'s something wrong , please try again'})
+		}
+		if(doc){
+			res.status(200).send({msg:' User has been suspended	'})
+		}
+	})
+}
+}
 exports.user_by_token = async(req , res)=>{
 	 res.status(200).send({data:req.generalUser})
  }
