@@ -30,7 +30,7 @@ module.exports = function(path,app) {
 	app.route(`${path}/section/update`).post(checkLogin_admin.checkLogin_admin, Section.update);
 
 	app.route(`${path}/country/add`).post(checkLogin_admin.checkLogin_admin, Country.add_country);
-	app.route(`${path}/country`).get(generalUser.generalUser, Country.get_country);
+	app.route(`${path}/country`).get( Country.get_country);
 	app.route(`${path}/country/update`).post(checkLogin_admin.checkLogin_admin, Country.update);
 
 	app.route(`${path}/order/create`).post(check_user.check_user, Order.add_order);

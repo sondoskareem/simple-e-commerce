@@ -201,9 +201,9 @@ exports.changePassword = async(req , res) => {
 
 // && req.query.role == 3
 exports.users = async(req , res) => {
-	if(req.query.role == 1  ){
+	if(req.query.role == 1 || req.query.role == 0 ){
 		await User.find({role:req.query.role})
-		.select(' name phone email location')
+		.select(' name country_id phone email location')
 		.populate('country_id')
 	   .then(data =>{
 		   res.status(200).send({ data: data })
@@ -212,19 +212,14 @@ exports.users = async(req , res) => {
 		res.status(400).send({data:'There\'s something wrong , please try again'})
 	}) 
 	}
-	// else{
-	// 	await User.find({})
-	// 	.select(' name phone email location')
-	//    .then(data =>{
-	// 	   res.status(200).send({ data: data })
-	// 	   })
-	//    .catch(err => { 
-	// 	   res.status(400).send({ data: err })
-	// 	}) 
-	// }
+
 	res.status(400).send({data:'There\'s something wrong , please try again'})
 	
 }
+
+// exports.UserInactive = async(req , res)=>{
+
+// }
 exports.user_by_token = async(req , res)=>{
 	 res.status(200).send({data:req.generalUser})
  }
