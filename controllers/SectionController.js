@@ -51,7 +51,6 @@ exports.update = (req , res) => {
 		console.log(data)
 		const filter = { _id:req.body.section_id }
 		updateSection(req , res , data , filter)
-	
 }
 
 async function updateSection(req , res , data , filter){
