@@ -203,6 +203,7 @@ exports.users = async(req , res) => {
 	if(req.query.role){
 		await User.find({role:req.query.role})
 		.select(' name phone email location')
+		.populate('country_id')
 	   .then(data =>{
 		   res.status(200).send({ data: data })
 		   })

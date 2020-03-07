@@ -154,7 +154,7 @@ exports.orderForCenter = (req , res)=>{
       country_id : req.check_center.country_id ,
       accepted_by_user:req.query.acceptedByUser ,
       accepted_by_center:req.query.acceptedByCenter,
-      rejected_by_center:false
+      // rejected_by_center:false
   }
     if(req.query.id){
       obj._id = req.query.id
