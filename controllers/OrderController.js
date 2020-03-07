@@ -198,15 +198,21 @@ query(obj , req , res)
 exports.OrderForUser = (req , res)=>{
   const obj = {
     user_id : req.check_user._id,
-    accepted_by_user:req.query.acceptedByUser ,
-    accepted_by_center:req.query.acceptedByCenter,
+    // accepted_by_user:req.query.acceptedByUser ,
+    // accepted_by_center:req.query.acceptedByCenter,
     rejected_by_center:false
+  }
+  if(req.query.acceptedByUser){
+    obj.accepted_by_user = req.query.acceptedByUser 
+  }
+  if(req.query.acceptedByCenter){
+    obj.accepted_by_center = req.query.acceptedByCenter 
   }
   if(req.query.id){
      obj._id = req.query.id
   }
-  else if(req.query.rejected_by_center){
-    obj._id = req.query.rejected_by_center
+  if(req.query.rejectedByCenter){
+    obj.rejected_by_center = req.query.rejectedByCenter
   }
   
   query(obj , req , res)
@@ -256,7 +262,7 @@ async function query(params, req , res){
   await Order.find(params)
   .populate('country_id' , 'name flag')
   .populate('section_id' , 'image description')
-  .select('description center_approvedAt section_id phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
+  .select('description rejected_by_center center_approvedAt section_id phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
   .then(result =>{
     res.status(200).send({data:result})
   })
