@@ -35,7 +35,6 @@ exports.add_section = (req , res)=>{
 exports.update = (req , res) => {
 	const data = {
 		updateddAt : moment().format('DD/MM/YYYY')
-
 	}
 	if(req.body.file){
 		var name = uuidv1();
