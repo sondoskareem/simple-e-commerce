@@ -11,7 +11,7 @@ var nodemailer = require('nodemailer');
 const uuidv1 = require('uuid/v1');
 const sendNotification = require('../oneSignal/sendNotification')
 var base64Img = require('base64-img');
-const querystring = require('query-string');
+// const querystring = require('query-string');
 
 exports.add_order =  (req, res) =>{
 	const validating = OrderValidation.order(req.body);
