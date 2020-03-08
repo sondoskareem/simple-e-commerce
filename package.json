@@ -16,6 +16,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.16.4",
     "express-fileupload": "^1.1.5",
+    "firebase-admin": "^8.9.2",
     "isodate": "^0.1.4",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.5.1",
