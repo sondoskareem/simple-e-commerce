@@ -4,7 +4,7 @@ var express = require('express')
   require('dotenv').config();
   port = process.env.PORT || 8000
   // port = 8000
-  // const admin = require('firebase-admin')
+  const admin = require('firebase-admin')
   const InitiateMongoServer = require("./config/db")
 
   bodyParser = require('body-parser');
