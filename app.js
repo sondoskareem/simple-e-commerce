@@ -4,18 +4,18 @@ var express = require('express')
   require('dotenv').config();
   port = process.env.PORT || 8000
   // port = 8000
-  const admin = require('firebase-admin')
+  // const admin = require('firebase-admin')
   const InitiateMongoServer = require("./config/db")
 
   bodyParser = require('body-parser');
   var upload = require('express-fileupload');
   var cors = require('cors');
 
-  const serviceAccount = require("./config/fbAuth/jepo-e4306-firebase-adminsdk-lpfnd-0d7f102cad.json");
-  const auth = admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://jepo-e4306.firebaseio.com"
-  });
+  // const serviceAccount = require("./config/fbAuth/jepo-e4306-firebase-adminsdk-lpfnd-0d7f102cad.json");
+  // const auth = admin.initializeApp({
+  //   credential: admin.credential.cert(serviceAccount),
+  //   databaseURL: "https://jepo-e4306.firebaseio.com"
+  // });
 
 
 
