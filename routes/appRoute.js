@@ -21,8 +21,8 @@ module.exports = function(path,app) {
 	app.route(`${path}/auth/register`).post(User.create_a_User);
 	app.route(`${path}/auth/registerCenterCall`).post(checkLogin_admin.checkLogin_admin,User.create_a_CenterCallUser);
 	app.route(`${path}/auth/login`).post(User.loginUser);
-	app.route(`${path}/change/password`).post(check_user.check_user,User.changePassword);
-	app.route(`${path}/forget/password`).post(User.changePassword);
+	app.route(`${path}/center/forget`).post(checkLogin_admin.checkLogin_admin,User.ForgetPassword);
+	app.route(`${path}/user/forget`).post(User.ForgetPassword);
 
 	app.route(`${path}/users`).get(checkLogin_admin.checkLogin_admin, User.users);
 	app.route(`${path}/user`).get(generalUser.generalUser, User.user_by_token);

@@ -172,10 +172,7 @@ exports.orderForCenter = (req , res)=>{
 
 exports.orderForAdmin = (req , res)=>{
   const obj ={isActive:true}
-// = {
-//     accepted_by_user:req.query.acceptedByUser ,
-//     accepted_by_center:req.query.acceptedByCenter
-// }
+
   if(req.query.id){
     obj._id = req.query.id
 
@@ -186,13 +183,13 @@ if(req.query.country_id){
   obj.country_id = req.query.country_id
 }
 if(req.query.acceptedByUser){
-  obj.accepted_by_user = req.query.acceptedByUser
+  obj.accepted_by_user = JSON.parse(req.query.acceptedByUser)
 }
 if(req.query.acceptedByCenter){
-  obj.accepted_by_center = req.query.acceptedByCenter
+  obj.accepted_by_center = JSON.parse(req.query.acceptedByCenter)
 }
 if(req.query.rejectedByCenter){
-  obj.rejected_by_center = req.query.rejectedByCenter
+  obj.rejected_by_center = JSON.parse(req.query.rejectedByCenter)
 }
 query(obj , req , res)
 }
@@ -207,16 +204,16 @@ exports.OrderForUser = (req , res)=>{
     isActive:true
   }
   if(req.query.acceptedByUser){
-    obj.accepted_by_user = req.query.acceptedByUser 
+    obj.accepted_by_user =  JSON.parse(req.query.acceptedByUser)
   }
   if(req.query.acceptedByCenter){
-    obj.accepted_by_center = req.query.acceptedByCenter 
+    obj.accepted_by_center = JSON.parse(req.query.acceptedByCenter)
   }
   if(req.query.id){
      obj._id = req.query.id
   }
   if(req.query.rejectedByCenter){
-    obj.rejected_by_center = req.query.rejectedByCenter
+    obj.rejected_by_center = JSON.parse(req.query.rejectedByCenter)
   }
   
   query(obj , req , res)
@@ -265,7 +262,7 @@ res.status(200).send({obj})
 
 //param validation
 async function query(params, req , res){
-  // console.log(params) 
+  console.log(params) 
   await Order.find(params)
   .populate('country_id' , 'name flag')
   .populate('section_id' , 'image description')

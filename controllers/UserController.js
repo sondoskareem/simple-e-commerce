@@ -176,16 +176,21 @@ exports.loginUser =  (req, res)=> {
 
 
 
-exports.changePassword = async(req , res) => {
+exports.ForgetPassword = async(req , res) => {
 	if(!req.body.phone || !req.body.password){
 		res.send.status(400).send({msg :'Please inter the required field'})
 
 	}else{
+		var salt = bcrypt.genSaltSync(10);
+		var hash = bcrypt.hashSync(req.body.password, salt);
 		const data = { 
-			password: req.body.password ,
+			password:hash,
 			updateddAt: moment().format('DD/MM/YYYY')
 			};
-			const filter = {phone:req.body.phone}
+			const filter = {
+							phone:req.body.phone,
+							isActive:true
+						}
 
 		await User.findOneAndUpdate(filter, data, {
 			new: true
