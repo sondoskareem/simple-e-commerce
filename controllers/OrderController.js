@@ -26,7 +26,7 @@ exports.add_order =  (req, res) =>{
           var Filepath = "./public/" ;
           var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
           //local \\ , on server must split on /
-        var img = imgPath.split("\\", 2)
+        var img = imgPath.split("/", 2)
      
       console.log(img)
       // console.log(img[1])
