@@ -53,13 +53,24 @@ exports.add_order =  (req, res) =>{
             createdAt: req.body.createdAt,
             updateddAt: req.body.createdAt,
           })
-          var count= parseInt(req.body.count) + 1 
-				  Section.updateOne({ _id: req.body.section_id }, { $set: { count: count } })
+          const data ={
+            count: parseInt(req.body.count) + 1 
+            }
+            console.log(data)
+            Section.findOneAndUpdate(req.body.country_id, data, {
+            new: true
+            } ,  (err, doc) => {
+            if (err) {
+              res.status(400).send({msg :'There\'s something wrong , please try again'})
+            }if(doc){
+              console.log(doc)
+            }
+				})
           // console.log(order)
           order.save()
           .then(result =>{
-              console.log(req.check_country)
-              console.log(req.check_section._id)
+              // console.log('u   '+req.check_country)
+              // console.log(req.check_section._id)
 
             res.status(200).send({msg:'You\'r request has been sent successfuly' })
             // console.log(result._id)

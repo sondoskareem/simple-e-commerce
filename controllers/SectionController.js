@@ -65,10 +65,6 @@ async function updateSection(req , res , data , filter){
 			
 		res.status(200).send({data :'Done'})
 		}
-		
-		// else{
-		//   res.status(400).send({msg:'There\'s something wrong , please try again'})
-		// }
 	  });
 }
 exports.get_section = async(req , res)=>{

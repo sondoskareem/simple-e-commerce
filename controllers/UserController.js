@@ -36,10 +36,22 @@ function CreateUser(role , req , res){
 				createdAt:  moment().format('DD/MM/YYYY'),
 				updateddAt: moment().format('DD/MM/YYYY'),
 			  });
-			  if(role ==1){
-				  var count= parseInt(req.body.count) + 1 
-				  Country.updateOne({ _id: req.body.country_id }, { $set: { count: count } })
-				}
+			  console.log(role)
+			  if(role === 1){
+				  const data ={
+					count: parseInt(req.body.count) + 1 
+				  }
+				  console.log(data)
+				  Country.findOneAndUpdate(req.body.country_id, data, {
+					new: true
+				  } ,  (err, doc) => {
+					if (err) {
+						res.status(400).send({msg :'There\'s something wrong , please try again'})
+					}if(doc){
+						console.log(doc)
+					}
+				})
+			}
 			  user.save()
 			  .then(result =>{
 				var token = jwt.sign({
