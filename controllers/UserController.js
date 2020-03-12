@@ -5,11 +5,13 @@ var moment = require('moment');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users')
+const Country = require('../models/country')
 var UserValidation = require('../validation/UserValidation');
 // const config_token = require("../config/token")
 // const config_token = process.env.TOKEN
 const config_token ='_tT76___z0@k044sokiu8792^)sdZZz$$'
 
+// function updateCountryIfRoleOne(req)
 function CreateUser(role , req , res){
 	const validating = UserValidation.new_user(req.body);
 	if (validating.error) {
@@ -30,9 +32,14 @@ function CreateUser(role , req , res){
 				isActive: true,
 				player_id: req.body.player_id,
 				country_id: req.body.country_id,
+				count: req.body.count,
 				createdAt:  moment().format('DD/MM/YYYY'),
 				updateddAt: moment().format('DD/MM/YYYY'),
 			  });
+			  if(role ==1){
+				  var count= parseInt(req.body.count) + 1 
+				  Country.updateOne({ _id: req.body.country_id }, { $set: { count: count } })
+				}
 			  user.save()
 			  .then(result =>{
 				var token = jwt.sign({
@@ -118,11 +125,28 @@ exports.CreateAdmin = ( req , res) => {
 
 exports.create_a_User = function (req, res) {
 	CreateUser(0 , req, res);
+
 }
 
 exports.create_a_CenterCallUser = (req , res)=>{
-	CreateUser(1 , req, res);
+	CreateUser(1 , req, res)
+
+	// const data = { 
+	// 	count: req.body.count + 1 ,
+	// 	updateddAt: moment().format('DD/MM/YYYY')
+	// 	};
+	// 	const filter = { _id:req.body.country_id ,isActive:true}
+	//  Country.findOneAndUpdate(filter, data, {
+	// 	new: true
+	//   } ,  (err, doc) => {
+	// 	if (err) {
+	// 		res.status(400).send({msg :'There\'s something wrong , please try again'})
+	// 	}
+	
+	// 	res.status(200).send({data : 'Done'})
+	// });
 }
+
 exports.loginUser =  (req, res)=> {
 	if (req.body.phone && req.body.password) {
 		  User.find({ phone: req.body.phone , isActive:true})

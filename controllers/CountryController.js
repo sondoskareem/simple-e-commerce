@@ -19,7 +19,8 @@ exports.add_country = (req , res)=>{
         const country = new Country({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
-            flag:img[1],
+			flag:img[1],
+			count:0,
             isActive: true,
             createdAt:  moment().format('DD/MM/YYYY'),
             updateddAt: moment().format('DD/MM/YYYY'),
@@ -62,7 +63,7 @@ exports.update = async(req , res) => {
 }
 exports.get_country = async(req , res)=>{
 	Country.find({isActive:true})
-	.select('description name flag')
+	.select('description count name flag')
 	.then(result =>{
 		res.status(200).send({data:result})
 	})

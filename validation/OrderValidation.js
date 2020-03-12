@@ -11,6 +11,7 @@ exports.order = function (Order) {
         'createdAt': Joi.string().required(),
         'country_id' :Joi.string().required(),
         'file' :Joi.string().required(),
+        'count':Joi.number().required(),
     }
     return Joi.validate(Order, OrderSchema);
 }

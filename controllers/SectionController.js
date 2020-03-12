@@ -19,6 +19,7 @@ exports.add_section = (req , res)=>{
 		description: req.body.description,
 		image: img[1],
 		isActive: true,
+		count:0,
         createdAt:  moment().format('DD/MM/YYYY'),
         updateddAt: moment().format('DD/MM/YYYY'),
     })
@@ -72,7 +73,7 @@ async function updateSection(req , res , data , filter){
 }
 exports.get_section = async(req , res)=>{
 	Sections.find({isActive:true})
-	.select('description image')
+	.select('description count image')
 	.then(result =>{
 		res.status(200).send({data:result})
 	})

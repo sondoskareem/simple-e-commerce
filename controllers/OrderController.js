@@ -5,13 +5,14 @@ var moment = require('moment');
 var OrderValidation = require('../validation/OrderValidation');
 const joi = require('joi');
 const Order = require('../models/orders')
+const Section = require('../models/sections')
 const jwt = require('jsonwebtoken');
 const shortid = require('shortid');
 var nodemailer = require('nodemailer');
 const uuidv1 = require('uuid/v1');
 const sendNotification = require('../oneSignal/sendNotification')
 var base64Img = require('base64-img');
-// const querystring = require('query-string');
+const querystring = require('query-string');
 
 exports.add_order =  (req, res) =>{
 	const validating = OrderValidation.order(req.body);
@@ -52,6 +53,8 @@ exports.add_order =  (req, res) =>{
             createdAt: req.body.createdAt,
             updateddAt: req.body.createdAt,
           })
+          var count= parseInt(req.body.count) + 1 
+				  Section.updateOne({ _id: req.body.section_id }, { $set: { count: count } })
           // console.log(order)
           order.save()
           .then(result =>{
@@ -171,27 +174,36 @@ exports.orderForCenter = (req , res)=>{
 
 
 exports.orderForAdmin = (req , res)=>{
-  const obj ={isActive:true}
+  let obj2 ={isActive:true}
+  const map = new Map(Object.entries(req.query));
 
-  if(req.query.id){
-    obj._id = req.query.id
+  let obj = Array.from(map).reduce((obj, [key, value]) => (
+    Object.assign(obj, {[chanageKeyValue(key)]: boolFromStringOtherwiseNull(value)
+     }) 
+  ), {});
 
-} if(req.query.section_id){
-    obj.section_id = req.query.section_id
-}
-if(req.query.country_id){
-  obj.country_id = req.query.country_id
-}
-if(req.query.acceptedByUser){
-  obj.accepted_by_user = JSON.parse(req.query.acceptedByUser)
-}
-if(req.query.acceptedByCenter){
-  obj.accepted_by_center = JSON.parse(req.query.acceptedByCenter)
-}
-if(req.query.rejectedByCenter){
-  obj.rejected_by_center = JSON.parse(req.query.rejectedByCenter)
-}
-query(obj , req , res)
+  function boolFromStringOtherwiseNull(s) {
+    if (s == 'true') return true
+    if (s == 'false') return false
+    return s
+  }
+  function chanageKeyValue(k){
+    if(k == 'acceptedByCenter') return 'accepted_by_center'
+    if(k== 'acceptedByUser') return 'accepted_by_user'
+    if(k == 'id') return' _id'
+    if(k == 'rejectedByCenter') return 'rejected_by_center'
+    return k
+  }
+
+  if(obj.hasOwnProperty('page_number') || obj.hasOwnProperty('limit'))
+  {
+    delete obj.limit
+    delete obj.page_number
+  }
+  obj = Object.assign(obj2, obj)
+// console.log(obj)
+
+query(obj , req , res , req.query.page_number , req.query.limit)
 }
   
 
@@ -261,12 +273,17 @@ res.status(200).send({obj})
 
 
 //param validation
-async function query(params, req , res){
+ function query(params, req , res ,  page_number = 0, limit = 0 ){
   console.log(params) 
-  await Order.find(params)
+  console.log('page_number ' + page_number)
+  console.log('limit ' + limit)
+   Order.find(params)
+  .limit(parseInt(limit))
+  .skip(parseInt(page_number) * parseInt(limit))
   .populate('country_id' , 'name flag')
   .populate('section_id' , 'image description')
   .select('description rejected_by_center center_approvedAt section_id phone accepted_by_user location accepted_by_center price  arrivalAt  image paid paidAt createdAt updateddAt')
+ 
   .then(result =>{
     res.status(200).send({data:result})
   })

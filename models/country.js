@@ -7,6 +7,10 @@ const CountrySchema = mongoose.Schema({
     type: String,
     required: true
   },
+  count:{
+    type: Number,
+    required: true
+  },
   flag: {
     type: String,
     required: true
