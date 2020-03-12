@@ -11,7 +11,7 @@ exports.new_user=function (User) {
         'location':Joi.string().required(),
         'player_id':Joi.string().required(),
         'country_id' :Joi.string().required(),
-        // 'count':Joi.number().required(),
+        'count':Joi.number().required(),
     }
     return Joi.validate(User, UserSchema);
 }
