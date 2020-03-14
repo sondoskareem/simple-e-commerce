@@ -8,7 +8,7 @@ exports.check_country= function (req, res, next) {
     Country.findOne({_id: country_id  , isActive:true})
 		.then(result =>{
             if(result){ 
-
+console.log('result ' + result)
                 User.find({country_id:result._id , isActive:true , role:1})
                 .then(userREsult =>{
                    if(userREsult){
@@ -17,6 +17,7 @@ exports.check_country= function (req, res, next) {
                         obj.push(user.player_id)
                         
                     })
+                    console.log(' obj     ' + obj)
                     req.check_country = obj
                     next()
                 }else{
