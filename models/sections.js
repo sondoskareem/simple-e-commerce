@@ -16,7 +16,7 @@ const SectionSchema = mongoose.Schema({
     required: true
   },
   count: {
-    type: Number,
+    type: String,
     required: true
   },
   createdAt: {
