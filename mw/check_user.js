@@ -9,6 +9,8 @@ exports.check_user= function (req, res, next) {
 	var token = req.headers.token
 	if (token) {
 		try {
+	console.log('ios  u ' + req.body)
+
 			jwt.verify(token, config_token,
 				function (err, decoded) { 
 					if (err) {

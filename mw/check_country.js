@@ -3,6 +3,7 @@ const User = require('../models/users')
 
 exports.check_country= function (req, res, next) {
 	var country_id = req.body.country_id
+	console.log('ios c ' + req.body)
 	
     Country.findOne({_id: country_id  , isActive:true})
 		.then(result =>{

@@ -2,7 +2,7 @@ const Section = require('../models/sections')
 
 exports.check_section= function (req, res, next) {
 	var section_id = req.body.section_id
-	
+	console.log('ios  s ' + req.body)
     Section.findOne({_id: section_id  , isActive:true})
 		.then(result =>{
 			if(result){

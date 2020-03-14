@@ -17,11 +17,15 @@ const querystring = require('query-string');
 exports.add_order =  (req, res) =>{
 	const validating = OrderValidation.order(req.body);
 	if (validating.error) {
+	console.log('ios err ' + req.body)
+
 	  res.status(400).send({
 		msg: validating.error.details[0].message
       })
     }else{
       if(req.body.file){
+	console.log('ios succ  ' + req.body)
+
         // console.log(req.body.file)
           var name = uuidv1();
           var Filepath = "./public/" ;
