@@ -117,6 +117,7 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
               //   "include_player_ids": [playerId],
               // }
               // sendNotification(message);
+
     res.status(200).send({data :'request has been sent'})
     }else{
       res.status(400).send({msg:'There\'s something wrong , please try again'})
@@ -124,91 +125,103 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
   });
 }
 
-// async function getOrder(user_id , filter){
-//   Order.find()
-// }
-exports.accepted_by_center = (req , res) =>{
-  const data = { 
-    accepted_by_center: req.body.accepted_by_center ,
-    price: req.body.price ,
-    arrivalAt: req.body.arrivalAt ,
-    center_approvedAt: req.body.center_approvedAt ,
-    center_player_id:req.check_center.player_id
-    };
-    const order_id = req.body.order_id
-    const filter = {_id:order_id}
-    console.log('acceptedByCenter  ' + req.body )
-    // console.log( 'req.check_center.player_id   ' + req.check_center.player_id)
-   updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
-}
+exports.orderActionAccordingToUserType = (req , res)=>{
+  let data = {} , Person_player_id = ' '
 
-exports.accepted_by_user = async (req, res) =>{
-  const data = { 
-    accepted_by_user: req.body.accepted_by_user ,
-    paid:req.body.paid,
-    paidAt:req.body.paidAt
-    };
-    const order_id = req.body.order_id
-    const filter = {_id:order_id}
-    console.log('TEST ........  ' + req.body)
-    // res.status(200).send({data:'Test'})
-    updatedOrder('center_player_id' ,filter , data ,order_id , req , res)
-}
+  // console.log(req.url)
+  //see if the request from center
+  if (req.check_center){
 
-exports.rejected_by_center = async(req , res)=>{
-  const data = { 
-    rejected_by_center: true,
-    accepted_by_center:false,
-    price:' ',
-    arrivalAt: ' ',
-
-    };
-    const order_id = req.body.order_id
-    const filter = {_id:order_id}
-    // console.log()
-   updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
-}
-
-exports.orderForCenter = (req , res)=>{
-  const obj = {
-      country_id : req.check_center.country_id ,
-      accepted_by_user:req.query.acceptedByUser ,
-      accepted_by_center:req.query.acceptedByCenter,
-      // rejected_by_center:false
-      isActive:true
+    if(req.url == 'api/v1/order/rejectedByCenter'){
+      [data.price , data.arrivalAt , data.rejected_by_center , data.accepted_by_center] = [' ' , ' ' , true , false]
+    }
+   
+    //for both accepted and rejected
+    data.center_player_id = req.check_center.player_id
+    Person_player_id = 'user_player_id'
   }
-    if(req.query.id){
-      obj._id = req.query.id
 
-  } if(req.query.section_id){
-      obj.section_id = req.query.section_id
-  }
-  query(obj , req , res)
+  else if(req.check_user) Person_player_id = 'center_player_id'
+
+let bodyData =req.body
+let finalData = Object.assign(bodyData, data)
+const order_id = req.body.order_id
+const filter = {_id:req.body.order_id}
+if(finalData.hasOwnProperty('order_id')) delete finalData.order_id
+ 
+
+
+console.log('bodyData  ' + JSON.stringify(finalData))
+console.log('player_id  ' + Person_player_id)
+console.log(  '  order_id  '+ order_id)
+console.log('filter  ' + JSON.stringify(filter))
+
+updatedOrder(Person_player_id ,(filter) , (finalData) ,order_id , req , res)
   
 }
+// exports.accepted_by_center = (req , res) =>{
+
+//   const data = { 
+//     accepted_by_center: req.body.accepted_by_center ,
+//     price: req.body.price ,
+//     arrivalAt: req.body.arrivalAt ,
+//     center_approvedAt: req.body.center_approvedAt ,
+//     center_player_id:req.check_center.player_id
+//     };
+//     const order_id = req.body.order_id
+//     const filter = {_id:order_id}
+//     console.log('acceptedByCenter  ' + req.body )
+//     // console.log( 'req.check_center.player_id   ' + req.check_center.player_id)
+//    updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
+// }
+
+// exports.accepted_by_user = async (req, res) =>{
+//   const data = { 
+//     accepted_by_user: req.body.accepted_by_user ,
+//     paid:req.body.paid,
+//     paidAt:req.body.paidAt
+//     };
+//     const order_id = req.body.order_id
+//     const filter = {_id:order_id}
+//     console.log('TEST ........  ' + req.body)
+//     // res.status(200).send({data:'Test'})
+//     updatedOrder('center_player_id' ,filter , data ,order_id , req , res)
+// }
+
+// exports.rejected_by_center = async(req , res)=>{
+//   const data = { 
+//     rejected_by_center: true,
+//     accepted_by_center:false,
+//     price:' ',
+//     arrivalAt: ' ',
+
+//     };
+//     const order_id = req.body.order_id
+//     const filter = {_id:order_id}
+//     // console.log()
+//    updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
+// }
 
 
-exports.orderForAdmin = (req , res)=>{
-  let obj2 ={isActive:true}
+exports.orderForAll = (req , res)=>{
+  //one function for center , admin , user , for getting order according to query params
+  //we will recognize if it user or center or admin by the mw , and set the default value accordingly
+  let obj2 = {}
+
+  if (req.check_center)  obj2.country_id = req.check_center.country_id
+  else if (req.check_user) [obj2.user_id , obj2.rejected_by_center] = [req.check_user._id , false]
+
+  //for all 
+  obj2.isActive = true
+
+  //get the query params and convert it to map array
   const map = new Map(Object.entries(req.query));
 
+  //looping and return correct keys and value and err if null
   let obj = Array.from(map).reduce((obj, [key, value]) => (
     Object.assign(obj, {[chanageKeyValue(key)]: boolFromStringOtherwiseNull(value)
      }) 
   ), {});
-
-  function boolFromStringOtherwiseNull(s) {
-    if (s == 'true') return true
-    if (s == 'false') return false
-    return s
-  }
-  function chanageKeyValue(k){
-    if(k == 'acceptedByCenter') return 'accepted_by_center'
-    if(k== 'acceptedByUser') return 'accepted_by_user'
-    if(k == 'id') return' _id'
-    if(k == 'rejectedByCenter') return 'rejected_by_center'
-    return k
-  }
 
   if(obj.hasOwnProperty('page_number') || obj.hasOwnProperty('limit'))
   {
@@ -221,32 +234,6 @@ exports.orderForAdmin = (req , res)=>{
 query(obj , req , res , req.query.page_number , req.query.limit)
 }
   
-
-exports.OrderForUser = (req , res)=>{
-  const obj = {
-    user_id : req.check_user._id,
-    // accepted_by_user:req.query.acceptedByUser ,
-    // accepted_by_center:req.query.acceptedByCenter,
-    rejected_by_center:false,
-    isActive:true
-  }
-  if(req.query.acceptedByUser){
-    obj.accepted_by_user =  JSON.parse(req.query.acceptedByUser)
-  }
-  if(req.query.acceptedByCenter){
-    obj.accepted_by_center = JSON.parse(req.query.acceptedByCenter)
-  }
-  if(req.query.id){
-     obj._id = req.query.id
-  }
-  if(req.query.rejectedByCenter){
-    obj.rejected_by_center = JSON.parse(req.query.rejectedByCenter)
-  }
-  
-  query(obj , req , res)
-}
-
-
 
 exports.OrderTimeZoneForAdmin = (req , res)=>{
   Order.find({createdAt: { $gt: req.query.greater, $lt: req.query.smaller }  , isActive:true })
@@ -307,4 +294,16 @@ res.status(200).send({obj})
   })
 }
 
-
+function boolFromStringOtherwiseNull(s) {
+  if (s == 'true') return true
+  if (s == 'false') return false
+  if(s == null) res.status(400).send({mag:'err'})
+  return s
+}
+function chanageKeyValue(k){
+  if(k == 'acceptedByCenter') return 'accepted_by_center'
+  if(k== 'acceptedByUser') return 'accepted_by_user'
+  if(k == 'id') return '_id'
+  if(k == 'rejectedByCenter') return 'rejected_by_center'
+  return k
+}

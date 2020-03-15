@@ -40,15 +40,15 @@ module.exports = function(path,app) {
 	app.route(`${path}/section/suspend`).post(checkLogin_admin.checkLogin_admin, Section.SectionInactive);
 
 	app.route(`${path}/order/create`).post(check_user.check_user,check_country.check_country, Order.add_order);
-	app.route(`${path}/order/acceptedByCenter`).post(check_center.check_center, Order.accepted_by_center);
-	app.route(`${path}/order/rejectedByCenter`).post(check_center.check_center, Order.rejected_by_center);
-	app.route(`${path}/order/acceptedByUser`).post(check_user.check_user, Order.accepted_by_user);
+	
+	app.route(`${path}/order/acceptedByCenter`).post(check_center.check_center, Order.orderActionAccordingToUserType);
+	app.route(`${path}/order/rejectedByCenter`).post(check_center.check_center, Order.orderActionAccordingToUserType);
+	app.route(`${path}/order/acceptedByUser`).post(check_user.check_user, Order.orderActionAccordingToUserType);
 
-	app.route(`${path}/order/center`).get(check_center.check_center, Order.orderForCenter);
+	app.route(`${path}/order/center`).get(check_center.check_center, Order.orderForAll);
+	app.route(`${path}/order/user`).get(check_user.check_user, Order.orderForAll);
+	app.route(`${path}/order/admin`).get(checkLogin_admin.checkLogin_admin, Order.orderForAll);
 
-	app.route(`${path}/order/user`).get(check_user.check_user, Order.OrderForUser);
-
-	app.route(`${path}/order/admin`).get(checkLogin_admin.checkLogin_admin, Order.orderForAdmin);
 	app.route(`${path}/order/timeZone`).get(checkLogin_admin.checkLogin_admin, Order.OrderTimeZoneForAdmin);
 	app.route(`${path}/order/timePeriod`).get(checkLogin_admin.checkLogin_admin, Order.Subtraction_OrderTimeZoneForAdmin);
 
@@ -56,5 +56,7 @@ module.exports = function(path,app) {
 	app.route(`${path}/driver`).get(checkLogin_admin.checkLogin_admin, Driver.getDrivers);
 
 	app.route(`${path}/charge`).post(check_user.check_user, Charge.charge);
+
+	app.route(`${path}/ordeers`).get(check_center.check_center, Order.orderActionAccordingToUserType);
 
 }
