@@ -57,22 +57,24 @@ exports.add_order =  (req, res) =>{
             createdAt: req.body.createdAt,
             updateddAt: req.body.createdAt,
           })
-          const data ={
-            count: parseInt(req.body.count) + 1 
-            }
-            console.log(data)
-            Section.findOneAndUpdate(req.body.country_id, data, {
-            new: true
-            } ,  (err, doc) => {
-            if (err) {
-              res.status(400).send({msg :'There\'s something wrong , please try again'})
-            }if(doc){
-              console.log(doc)
-            }
-				})
+          
+          
           // console.log(order)
           order.save()
           .then(result =>{
+            const data ={
+              count: parseInt(req.body.count) + 1 
+              }
+              console.log(data)
+            Section.findOneAndUpdate(req.body.section_id, data, {
+              new: true
+              } ,  (err, doc) => {
+              if (err) {
+                res.status(400).send({msg :'There\'s something wrong , please try again'})
+              }if(doc){
+                console.log(doc)
+              }
+          })
               // console.log('u   '+req.check_country)
               // console.log(req.check_section._id)
 
@@ -139,6 +141,19 @@ exports.orderActionAccordingToUserType = (req , res)=>{
     //for both accepted and rejected
     data.center_player_id = req.check_center.player_id
     Person_player_id = 'user_player_id'
+    const newData ={
+      count: parseInt(req.body.count) - 1 
+      }
+      console.log(newData)
+      Section.findOneAndUpdate(req.body.section_id, newData, {
+      new: true
+      } ,  (err, doc) => {
+      if (err) {
+        res.status(400).send({msg :'There\'s something wrong , please try again'})
+      }if(doc){
+        console.log(doc)
+      }
+    })
   }
 
   else if(req.check_user) Person_player_id = 'center_player_id'
