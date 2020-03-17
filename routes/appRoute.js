@@ -21,6 +21,10 @@ module.exports = function(path,app) {
 	app.route(`${path}/auth/register`).post(User.create_a_User);
 	app.route(`${path}/auth/registerCenterCall`).post(checkLogin_admin.checkLogin_admin,User.create_a_CenterCallUser);
 	app.route(`${path}/auth/login`).post(User.loginUser);
+
+	app.route(`${path}/email/confirmation`).post(User.confirm_email);
+	app.route(`${path}/resend/confirmation`).post(User.resend_code);
+
 	app.route(`${path}/center/forget`).post(checkLogin_admin.checkLogin_admin,User.ForgetPassword);
 	app.route(`${path}/user/forget`).post(User.ForgetPassword);
 
@@ -40,7 +44,7 @@ module.exports = function(path,app) {
 	app.route(`${path}/section/suspend`).post(checkLogin_admin.checkLogin_admin, Section.SectionInactive);
 
 	app.route(`${path}/order/create`).post(check_user.check_user,check_country.check_country, Order.add_order);
-	
+
 	app.route(`${path}/order/acceptedByCenter`).post(check_center.check_center, Order.orderActionAccordingToUserType);
 	app.route(`${path}/order/rejectedByCenter`).post(check_center.check_center, Order.orderActionAccordingToUserType);
 	app.route(`${path}/order/acceptedByUser`).post(check_user.check_user, Order.orderActionAccordingToUserType);

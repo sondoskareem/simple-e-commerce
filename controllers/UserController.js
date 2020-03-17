@@ -5,14 +5,17 @@ var moment = require('moment');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users')
+const send_email = require('../functions/send_email')
 const Country = require('../models/country')
 var UserValidation = require('../validation/UserValidation');
 // const config_token = require("../config/token")
 // const config_token = process.env.TOKEN
 const config_token ='_tT76___z0@k044sokiu8792^)sdZZz$$'
+const Email = require('../models/email');
 
 // function updateCountryIfRoleOne(req)
-function CreateUser(role , req , res){
+function CreateUser(role ,active, req , res){
+	let successMsg = 'Registeration done , please confirm your email '
 	const validating = UserValidation.new_user(req.body);
 	if (validating.error) {
 	  res.status(400).send({
@@ -29,7 +32,7 @@ function CreateUser(role , req , res){
 				email: req.body.email,
 				location: req.body.location,
 				role: role,
-				isActive: true,
+				isActive: active,
 				player_id: req.body.player_id,
 				country_id: req.body.country_id,
 				count: req.body.count,
@@ -38,6 +41,7 @@ function CreateUser(role , req , res){
 			  });
 			  console.log(role)
 			  if(role === 1){
+				successMsg = 'Registeration done'
 				  const data ={
 					count: parseInt(req.body.count) + 1 
 				  }
@@ -53,37 +57,23 @@ function CreateUser(role , req , res){
 				})
 			}
 			  user.save()
-			  .then(result =>{
-				var token = jwt.sign({
-					exp: Math.floor(Date.now() / 1000) + (32832000),
-					id: result._id,
-				  }, config_token);
-				  
-				  var obj = {
-					token:token,
-					role:result.role,
-					user:{
-						name:result.name,
-						email:result.email,
-						phone:result.phone
+				.then(result =>{
+					console.log(result.email +' .. '+ result._id +' .. '+ result.isActive)
+						if(active === false) send_email.send_email(result.email, result._id , req , res)
+						res.status(200).send({msg : successMsg})	
+						})
+				.catch(err =>{
+					var msg
+					if(err.name === 'MongoError' && err.code === 11000){
+					if(err.errmsg.includes("$phone_1 dup key")){
+						msg = "phone duplicated"
+					}else if(err.errmsg.includes("$email_1 dup key")){
+					msg = "email duplicated"
+					}else{
+						msg = err
+					} 
 					}
-				  }
-				res.status(200).send(obj)	
-					})
-			  .catch(err =>{
-				var msg
-				if(err.name === 'MongoError' && err.code === 11000){
-				if( err.errmsg.includes("$name_1 dup key")){
-				   msg = "name duplicated"
-				  }else if(err.errmsg.includes("$phone_1 dup key")){
-					 msg = "phone duplicated"
-				 }else if(err.errmsg.includes("$email_1 dup key")){
-				   msg = "email duplicated"
-				  }else{
-					   msg = err
-				  } 
-				}
-				 res.status(400).send({ msg: msg });
+					res.status(400).send({ msg: msg });
 			  })
 	}  
 }
@@ -136,32 +126,17 @@ exports.CreateAdmin = ( req , res) => {
 }
 
 exports.create_a_User = function (req, res) {
-	CreateUser(0 , req, res);
+	CreateUser(0 ,false, req, res);
 
 }
 
 exports.create_a_CenterCallUser = (req , res)=>{
-	CreateUser(1 , req, res)
-
-	// const data = { 
-	// 	count: req.body.count + 1 ,
-	// 	updateddAt: moment().format('DD/MM/YYYY')
-	// 	};
-	// 	const filter = { _id:req.body.country_id ,isActive:true}
-	//  Country.findOneAndUpdate(filter, data, {
-	// 	new: true
-	//   } ,  (err, doc) => {
-	// 	if (err) {
-	// 		res.status(400).send({msg :'There\'s something wrong , please try again'})
-	// 	}
-	
-	// 	res.status(200).send({data : 'Done'})
-	// });
+	CreateUser(1 ,true, req, res)
 }
 
 exports.loginUser =  (req, res)=> {
-	if (req.body.phone && req.body.password) {
-		  User.find({ phone: req.body.phone , isActive:true})
+	if (req.body.email && req.body.password) {
+		  User.find({ email: req.body.email})
 			.then(result => {
 				// console.log(result)
 
@@ -171,7 +146,7 @@ exports.loginUser =  (req, res)=> {
              if(result[0].isActive){ 
 				// console.log('result')
 
-				const filter = { phone: req.body.phone };
+				const filter = { email: req.body.email };
 				const data = { player_id: req.body.player_id };
 				User.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
 					if (err) {
@@ -195,7 +170,7 @@ exports.loginUser =  (req, res)=> {
 			  }
 			  res.status(200).send(obj)
 			}
-			else{res.status(401).send({msg:'You must first confirm your phone number'})}
+			else{res.status(401).send({msg:'You must first confirm your email'})}
 
 		}else{
 			res.status(400).send({msg:'incorrect Phone number or password'})
@@ -211,34 +186,6 @@ exports.loginUser =  (req, res)=> {
 }
 
 
-
-exports.ForgetPassword = async(req , res) => {
-	if(!req.body.phone || !req.body.password){
-		res.send.status(400).send({msg :'Please inter the required field'})
-
-	}else{
-		var salt = bcrypt.genSaltSync(10);
-		var hash = bcrypt.hashSync(req.body.password, salt);
-		const data = { 
-			password:hash,
-			updateddAt: moment().format('DD/MM/YYYY')
-			};
-			const filter = {
-							phone:req.body.phone,
-							isActive:true
-						}
-
-		await User.findOneAndUpdate(filter, data, {
-			new: true
-		  } ,  (err, doc) => {
-			if (err) {
-				res.status(400).send({msg :'There\'s something wrong , please try again'})
-			}
-		
-			res.status(200).send({data : 'Done'})
-		});
-	}
-}
 
 // && req.query.role == 3
 exports.users = async(req , res) => {
@@ -275,3 +222,100 @@ if(req.body.id){
 exports.user_by_token = async(req , res)=>{
 	 res.status(200).send({data:req.generalUser})
  }
+
+
+ ///////////////////////////////////////////////////
+exports.confirm_email = function (req, res) {
+	Email.find({ code: req.body.code})
+	  .then(result => {
+		if (result.length == 0) {
+		  res.status(400).send({ msg: "Wrong , check your code" })
+		} else {
+		  console.log("exp " + result[0].exp)
+		  console.log(result[0].user_id)
+		  var ex = moment((new Date(result[0].exp))).format('llll');
+		  var now = moment(Date.now()).format('llll');
+		  var ex1 = new Date(ex)
+		  var now1 = new Date(now)
+		  console.log('ex1   ' + ex1)
+		  console.log('now1   ' + now1)
+		  if (moment(now1).isSameOrAfter(moment(ex1))) {
+			Email.deleteOne({ code: req.body.code })
+			  .then(resultt => {
+				res.status(400).send({ msg: 'Try again later' })
+			  })
+			  .catch(err => {
+				res.status(400).send({ msg: 'Somthing went wrong' })
+			  })
+		  } else {
+
+			User.updateOne({_id: result[0].user_id}, {$set: {"isActive": true,}}, {new: true})
+			  .then(result2 => {
+			  })
+			  .catch(err => {
+				res.status(400).send({ msg: 'err' })
+			  });
+  
+			Email.deleteMany({ user_id: result[0].user_id })
+			  .then(result3 => {
+			  })
+			  .catch(err => {
+			  })
+
+			res.status(200).send({ msg: 'Account confirmed . please login again' })
+		  }
+		}
+	  })
+	  .catch(err => {
+		res.status(400).send({ msg: 'Somthing went wrong' })
+  
+	  })
+}
+  //////////////////////////////////////////resend code 
+exports.resend_code = function (req, res) {
+	User.find({email:req.body.email })
+	  .then(result => {
+		  console.log(result.length == 0)
+		if (result.length == 0) {
+		  res.status(400).send({ msg: 'No users found with this email' })
+		} else {
+			console.log(result[0].email , result[0]._id)
+			send_email.send_email(result[0].email, result[0]._id , req , res)
+			res.status(200).send({msg:'code has been sent'})
+		}
+	  })
+	  .catch(err => {
+		res.status(400).send({ msg: err })
+	  })
+  
+}
+
+exports.ForgetPassword = function (req, res) {
+	User.find({ _id: req.checklogin._id })
+	  .then(result => {
+		if (req.body.password && req.body.new_password) {
+		  var usercheck = bcrypt.compareSync(req.body.password, result[0].password);
+		  if (usercheck) {
+			var salt = bcrypt.genSaltSync(10);
+			var hash = bcrypt.hashSync(req.body.new_password, salt);
+
+			User.updateOne({_id: req.checklogin._id}, {$set: {"password": hash,}}, {new: true})
+			  .then(result => {
+				res.status(200).send({ res: 'Password has been changed' })
+			  })
+			  .catch(err => {
+				res.status(400).send({ msg: 'err' })
+			  });
+
+		  } else {
+			res.status(400).send({ res: 'Password not correct' })
+		  }
+		}
+		else {
+		  res.status(400).send({ res: 'You must enter the required field' })
+		}
+	  })
+	  .catch(err => {
+		res.status(400).send({ msg: err })
+	  })
+}
