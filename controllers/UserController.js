@@ -173,15 +173,15 @@ exports.loginUser =  (req, res)=> {
 			else{res.status(401).send({msg:'You must first confirm your email'})}
 
 		}else{
-			res.status(400).send({msg:'incorrect Phone number or password'})
+			res.status(400).send({msg:'incorrect email or password'})
 		}
 	})
 	.catch(err =>{
-		res.status(400).send({msg:'incorrect Phone number or password'})
+		res.status(400).send({msg:'incorrect email or password'})
 		// res.status(400).send({msg:err})
 	})
 	}else{
-		res.status(400).send({msg:'Phone and password required'})
+		res.status(400).send({msg:'email and password required'})
 	}
 }
 
