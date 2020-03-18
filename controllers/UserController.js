@@ -227,7 +227,7 @@ exports.user_by_token = async(req , res)=>{
 
 
  ///////////////////////////////////////////////////
- function check_email_code (req, res , code , email) {
+ function check_email_code (req, res , code , email , msg) {
 	Email.find({ code: code , email:email})
 	  .then(result => {
 		if (result.length == 0) {
@@ -257,13 +257,14 @@ exports.user_by_token = async(req , res)=>{
 			  .catch(err => {
 				res.status(400).send({ msg: 'err' })
 			  });
-  
+
 			Email.deleteMany({ user_id: result[0].user_id })
 			  .then(result3 => {
 			  })
 			  .catch(err => {
 			  })
 
+			  req.status(200).send({mag:msg})
 		  }
 		}
 	  })
@@ -293,20 +294,21 @@ exports.resend_code = function (req, res) {
 
 //account activation
 exports.confirm_email = function(req , res){
-	check_email_code(req , res , req.body.code,req.body.email);
-	res.status(200).send({ msg: 'Email confirmed' })
+	let msg = 'Email confirmed'
+	check_email_code(req , res , req.body.code,req.body.email , msg);
+	// res.status(200).send({ msg: '' })
 
 }
 
 exports.UserForgetPassword = function (req, res) {
 	
 		if (req.body.email && req.body.code) {
-			check_email_code(req , res , req.body.code , req.body.email);
+			let msg = 'Password updated'
+			check_email_code(req , res , req.body.code , req.body.email , msg);
 			var salt = bcrypt.genSaltSync(10);
 			var hash = bcrypt.hashSync(req.body.password, salt);
 			User.updateOne({_id: result[0].user_id}, {$set: {"password": hash,}}, {new: true})
 			.then(result2 => {
-				res.status(200).send({ msg: 'Password updated' })
 			})
 			.catch(err => {
 			  res.status(400).send({ msg: 'err' })
