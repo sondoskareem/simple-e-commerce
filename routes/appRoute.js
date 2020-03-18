@@ -25,7 +25,7 @@ module.exports = function(path,app) {
 	app.route(`${path}/email/confirmation`).post(User.confirm_email);
 	app.route(`${path}/resend/confirmation`).post(User.resend_code);
 
-	app.route(`${path}/center/forget`).post(checkLogin_admin.checkLogin_admin,User.ForgetPassword);
+	// app.route(`${path}/center/forget`).post(checkLogin_admin.checkLogin_admin,User.ForgetPassword);
 	app.route(`${path}/user/forget`).post(User.UserForgetPassword);
 
 	app.route(`${path}/users`).get(checkLogin_admin.checkLogin_admin, User.users);
