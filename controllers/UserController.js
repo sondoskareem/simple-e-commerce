@@ -136,9 +136,10 @@ exports.create_a_CenterCallUser = (req , res)=>{
 
 exports.loginUser =  (req, res)=> {
 	if (req.body.email && req.body.password) {
+		console.log(JSON.stringify(req.body))
 		  User.find({ email: req.body.email})
 			.then(result => {
-				// console.log(result)
+				console.log(result)
 
 				var usercheck = bcrypt.compareSync(req.body.password, result[0].password);
 				// console.log(usercheck)
@@ -225,8 +226,8 @@ exports.user_by_token = async(req , res)=>{
 
 
  ///////////////////////////////////////////////////
-exports.confirm_email = function (req, res) {
-	Email.find({ code: req.body.code})
+ function check_email_code (req, res , code , email) {
+	Email.find({ code: code , email:email})
 	  .then(result => {
 		if (result.length == 0) {
 		  res.status(400).send({ msg: "Wrong , check your code" })
@@ -240,7 +241,7 @@ exports.confirm_email = function (req, res) {
 		  console.log('ex1   ' + ex1)
 		  console.log('now1   ' + now1)
 		  if (moment(now1).isSameOrAfter(moment(ex1))) {
-			Email.deleteOne({ code: req.body.code })
+			Email.deleteOne({ code: code })
 			  .then(resultt => {
 				res.status(400).send({ msg: 'Try again later' })
 			  })
@@ -249,7 +250,7 @@ exports.confirm_email = function (req, res) {
 			  })
 		  } else {
 
-			User.updateOne({_id: result[0].user_id}, {$set: {"isActive": true,}}, {new: true})
+			User.updateOne({_id: result[0].user_id}, {$set: {"isActive": true}}, {new: true})
 			  .then(result2 => {
 			  })
 			  .catch(err => {
@@ -262,7 +263,6 @@ exports.confirm_email = function (req, res) {
 			  .catch(err => {
 			  })
 
-			res.status(200).send({ msg: 'Account confirmed . please login again' })
 		  }
 		}
 	  })
@@ -271,7 +271,7 @@ exports.confirm_email = function (req, res) {
   
 	  })
 }
-  //////////////////////////////////////////resend code 
+  //////////////////////////////////////////resend code for both account activation and forgetpassword
 exports.resend_code = function (req, res) {
 	User.find({email:req.body.email })
 	  .then(result => {
@@ -290,32 +290,29 @@ exports.resend_code = function (req, res) {
   
 }
 
-exports.ForgetPassword = function (req, res) {
-	User.find({ _id: req.checklogin._id })
-	  .then(result => {
-		if (req.body.password && req.body.new_password) {
-		  var usercheck = bcrypt.compareSync(req.body.password, result[0].password);
-		  if (usercheck) {
+//account activation
+exports.confirm_email = function(req , res){
+	check_email_code(req , res , req.body.code,req.body.email);
+	res.status(200).send({ msg: 'Email confirmed' })
+
+}
+
+exports.UserForgetPassword = function (req, res) {
+	
+		if (req.body.email && req.body.code) {
+			check_email_code(req , res , req.body.code , req.body.email);
 			var salt = bcrypt.genSaltSync(10);
-			var hash = bcrypt.hashSync(req.body.new_password, salt);
-
-			User.updateOne({_id: req.checklogin._id}, {$set: {"password": hash,}}, {new: true})
-			  .then(result => {
-				res.status(200).send({ res: 'Password has been changed' })
-			  })
-			  .catch(err => {
-				res.status(400).send({ msg: 'err' })
-			  });
-
-		  } else {
-			res.status(400).send({ res: 'Password not correct' })
-		  }
+			var hash = bcrypt.hashSync(req.body.password, salt);
+			User.updateOne({_id: result[0].user_id}, {$set: {"password": hash,}}, {new: true})
+			.then(result2 => {
+				res.status(200).send({ msg: 'Password updated' })
+			})
+			.catch(err => {
+			  res.status(400).send({ msg: 'err' })
+			});
 		}
 		else {
 		  res.status(400).send({ res: 'You must enter the required field' })
 		}
-	  })
-	  .catch(err => {
-		res.status(400).send({ msg: err })
-	  })
+	
 }

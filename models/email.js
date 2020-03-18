@@ -13,6 +13,10 @@ const emailSchema = mongoose.Schema({
     type: String,
     required: [true, 'user_id Is Required'],
   },
+  email: {
+    type: String,
+    required: [true, 'email Is Required'],
+  },
   exp: {
     type: String,
     required: [true, 'exp Is Required'],
