@@ -135,6 +135,7 @@ exports.create_a_CenterCallUser = (req , res)=>{
 }
 
 exports.loginUser =  (req, res)=> {
+	console.log(JSON.stringify(req.body))
 	if (req.body.email && req.body.password &&req.body.player_id) {
 		console.log(JSON.stringify(req.body))
 		  User.find({ email: req.body.email})
