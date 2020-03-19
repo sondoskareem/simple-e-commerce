@@ -10,8 +10,8 @@ exports.send_email  = function (email , id , req , res , successMsg){
 	var transporter = nodemailer.createTransport({
 		service: 'gmail',
 		auth: {
-		  user: 'shoppingorder8',
-		  pass: 'AAgHk2^#;'
+		  user: 'shoppingorder8@gmail.com',
+		  pass: 'Baghdad111'
 		},
 		tls: {
 		  rejectUnauthorized: false
