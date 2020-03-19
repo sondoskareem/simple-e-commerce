@@ -229,8 +229,10 @@ exports.user_by_token = async(req , res)=>{
 
  ///////////////////////////////////////////////////
  function check_email_code (req, res , code , email , msg) {
+	 console.log('code ' + code + '   email ' + email)
 	Email.find({ code: code , email:email})
 	  .then(result => {
+		  console.log(result)
 		if (result.length == 0) {
 		  res.status(400).send({ msg: "Wrong , check your code" })
 		} else {
@@ -243,6 +245,7 @@ exports.user_by_token = async(req , res)=>{
 		  console.log('ex1   ' + ex1)
 		  console.log('now1   ' + now1)
 		  if (moment(now1).isSameOrAfter(moment(ex1))) {
+			  console.log('if >')
 			Email.deleteOne({ code: code })
 			  .then(resultt => {
 				res.status(400).send({ msg: 'Try again later' })
@@ -254,6 +257,8 @@ exports.user_by_token = async(req , res)=>{
 
 			User.updateOne({_id: result[0].user_id}, {$set: {"isActive": true}}, {new: true})
 			  .then(result2 => {
+				  console.log('herrrrrr')
+			  res.status(200).send({msg:msg})
 			  })
 			  .catch(err => {
 				res.status(400).send({ msg: 'err' })
@@ -265,7 +270,6 @@ exports.user_by_token = async(req , res)=>{
 			//   .catch(err => {
 			//   })
 
-			  req.status(200).send({mag:msg})
 		  }
 		}
 	  })
