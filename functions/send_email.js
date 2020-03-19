@@ -45,7 +45,7 @@ exports.send_email  = function (email , id , req , res , successMsg){
 				  email.save()
 			.then(result1 => {
 			   console.log(result1)
-			   res.status(200).send({msg:successMsg})
+			   res.status(200).send({msg:'Code send'})
 			})
 			.catch(err => {
 				res.status(400).send({msg:'err'})
