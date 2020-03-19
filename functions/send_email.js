@@ -34,7 +34,7 @@ exports.send_email  = function (email , id , req , res , successMsg){
 		  res.status(400).send({ msg: 'err' })
 		} else {
 			console.log('inside222')
-			Email.deleteMany({user_id:id}).then(resulttt=>{
+			// Email.deleteMany({user_id:id}).then(resulttt=>{
 				const email = new Email({
 					_id: new mongoose.Types.ObjectId(),
 					code: shortID,
@@ -50,7 +50,7 @@ exports.send_email  = function (email , id , req , res , successMsg){
 			.catch(err => {
 				res.status(400).send({msg:'err'})
 			})
-			}).catch(err=>{})
+			// }).catch(err=>{})
 		  
 	  console.log('4000')
 
