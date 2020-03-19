@@ -59,8 +59,9 @@ function CreateUser(role ,active, req , res){
 			  user.save()
 				.then(result =>{
 					console.log(result.email +' .. '+ result._id +' .. '+ result.isActive)
-						if(active === false) send_email.send_email(result.email, result._id , req , res)
-						res.status(200).send({msg : successMsg})	
+						if(active === false) send_email.send_email(result.email, result._id , req , res , successMsg)
+						else if (active === true)res.status(200).send({msg : successMsg})	
+						// 
 						})
 				.catch(err =>{
 					var msg

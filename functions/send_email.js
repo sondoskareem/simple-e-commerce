@@ -4,7 +4,7 @@ const shortid = require('shortid');
 var nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 
-exports.send_email  = function (email , id , req , res){
+exports.send_email  = function (email , id , req , res , successMsg){
 	var shortID = shortid.generate()
 	// console.log('//////////////////////111')
 	var transporter = nodemailer.createTransport({
@@ -46,6 +46,7 @@ exports.send_email  = function (email , id , req , res){
 				  email.save()
 			.then(result1 => {
 			   console.log(result1)
+			   res.status(200).send({msg:successMsg})
 			})
 			.catch(err => {
 				res.status(400).send({msg:'err'})
