@@ -10,8 +10,8 @@ exports.send_email  = function (email , id , req , res , successMsg){
 	var transporter = nodemailer.createTransport({
 		service: 'gmail',
 		auth: {
-		  user: 'sondosabd94@gmail.com',
-		  pass: 'AAgHk2^#;'
+		  user: 'erna.beier@ethereal.email',
+		  pass: 'gRxSX3YKk6wAZu22XJ'
 		},
 		tls: {
 		  rejectUnauthorized: false
@@ -20,7 +20,7 @@ exports.send_email  = function (email , id , req , res , successMsg){
 	  console.log('2000')
 
 	  var mailOptions = {
-		from: 'sondosabd94@gmail.com',
+		from: 'erna.beier@ethereal.email',
 		to:email,
 		subject: 'Account validation',
 		html: `<p> confirmation code :  \n <h2> ${shortID} </h2></p>`
