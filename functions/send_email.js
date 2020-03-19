@@ -27,7 +27,6 @@ exports.send_email  = function (email , id , req , res , successMsg){
 	  };
 	  console.log('3000')
 
-
 	  transporter.sendMail(mailOptions, function (error, info) {
 		//   console.log('fun not working ')
 		if (error) {
