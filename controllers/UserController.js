@@ -259,11 +259,11 @@ exports.user_by_token = async(req , res)=>{
 				res.status(400).send({ msg: 'err' })
 			  });
 
-			Email.deleteMany({ user_id: result[0].user_id })
-			  .then(result3 => {
-			  })
-			  .catch(err => {
-			  })
+			// Email.deleteMany({ user_id: result[0].user_id })
+			//   .then(result3 => {
+			//   })
+			//   .catch(err => {
+			//   })
 
 			  req.status(200).send({mag:msg})
 		  }
