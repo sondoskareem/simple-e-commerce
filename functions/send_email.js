@@ -35,14 +35,14 @@ exports.send_email  = function (email , id , req , res , successMsg){
 		} else {
 			console.log('inside222')
 			// Email.deleteMany({user_id:id}).then(resulttt=>{
-				const email = new Email({
+				const newemail = new Email({
 					_id: new mongoose.Types.ObjectId(),
 					code: shortID,
 					email: email,
 					user_id: id,
 					exp: moment().add(1, 'hours').format('llll')
 				  })
-				  email.save()
+				  newemail.save()
 			.then(result1 => {
 			   console.log('cooooooodeee  '+result1)
 			//    res.status(200).send({msg:'Registration Done'})
