@@ -45,7 +45,7 @@ exports.send_email  = function (email , id , req , res , successMsg){
 				  email.save()
 			.then(result1 => {
 			   console.log('cooooooodeee  '+result1)
-			   res.status(200).send({msg:'Registration Done'})
+			//    res.status(200).send({msg:'Registration Done'})
 			})
 			.catch(err => {
 				res.status(400).send({msg:'err'})
