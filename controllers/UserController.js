@@ -228,56 +228,57 @@ exports.user_by_token = async(req , res)=>{
 
 
  ///////////////////////////////////////////////////
- function check_email_code (req, res , code , email , msg) {
-	 console.log('code ' + code + '   email ' + email)
-	Email.find({ code: code , email:email})
-	  .then(result => {
-		  console.log(result)
-		if (result.length == 0) {
-		  res.status(400).send({ msg: "Wrong , check your code" })
-		} else {
-		  console.log("exp " + result[0].exp)
-		  console.log(result[0].user_id)
-		  var ex = moment((new Date(result[0].exp))).format('llll');
-		  var now = moment(Date.now()).format('llll');
-		  var ex1 = new Date(ex)
-		  var now1 = new Date(now)
-		  console.log('ex1   ' + ex1)
-		  console.log('now1   ' + now1)
-		  if (moment(now1).isSameOrAfter(moment(ex1))) {
-			  console.log('if >')
-			Email.deleteOne({ code: code })
-			  .then(resultt => {
-				res.status(400).send({ msg: 'Try again later' })
-			  })
-			  .catch(err => {
-				res.status(400).send({ msg: 'Somthing went wrong' })
-			  })
-		  } else {
+//  function check_email_code (req, res , code , email , next ) {
+// 	 console.log('code ' + code + '   email ' + email)
+// 	Email.find({ code: code , email:email})
+// 	  .then(result => {
+// 		  console.log(result)
+// 		if (result.length == 0) {
+// 		  res.status(400).send({ msg: "Wrong , check your code" })
+// 		} else {
+// 		  console.log("exp " + result[0].exp)
+// 		  console.log(result[0].user_id)
+// 		  var ex = moment((new Date(result[0].exp))).format('llll');
+// 		  var now = moment(Date.now()).format('llll');
+// 		  var ex1 = new Date(ex)
+// 		  var now1 = new Date(now)
+// 		  console.log('ex1   ' + ex1)
+// 		  console.log('now1   ' + now1)
+// 		  if (moment(now1).isSameOrAfter(moment(ex1))) {
+// 			  console.log('if >')
+// 			Email.deleteOne({ code: code })
+// 			  .then(resultt => {
+// 				res.status(400).send({ msg: 'Try again later' })
+// 			  })
+// 			  .catch(err => {
+// 				res.status(400).send({ msg: 'Somthing went wrong' })
+// 			  })
+// 		  } else {
 
-			User.updateOne({_id: result[0].user_id}, {$set: {"isActive": true}}, {new: true})
-			  .then(result2 => {
-				  console.log('herrrrrr')
-			  res.status(200).send({msg:msg})
-			  })
-			  .catch(err => {
-				res.status(400).send({ msg: 'err' })
-			  });
+// 			User.updateOne({email:email}, {$set: {"isActive": true}}, {new: true})
+// 			  .then(result2 => {
+// 				  console.log('herrrrrr')
+// 				  next();
+// 				//   Email.deleteMany({ email: email , code:code })
+// 				//   .then(result3 => {
+// 				// 	  console.log('done')
+// 				//   })
+// 				//   .catch(err => {
+// 				// 	res.status(400).send({ msg: 'err' })
+// 				//   })
+// 			  })
+// 			  .catch(err => {
+// 				res.status(400).send({ msg: 'err' })
+// 			  });
 
-			// Email.deleteMany({ user_id: result[0].user_id })
-			//   .then(result3 => {
-			//   })
-			//   .catch(err => {
-			//   })
-
-		  }
-		}
-	  })
-	  .catch(err => {
-		res.status(400).send({ msg: 'Somthing went wrong' })
+// 		  }
+// 		}
+// 	  })
+// 	  .catch(err => {
+// 		res.status(400).send({ msg: 'Somthing went wrong' })
   
-	  })
-}
+// 	  })
+// }
   //////////////////////////////////////////resend code for both account activation and forgetpassword
 exports.resend_code = function (req, res) {
 	User.find({email:req.body.email })
@@ -300,20 +301,23 @@ exports.resend_code = function (req, res) {
 //account activation
 exports.confirm_email = function(req , res){
 	let msg = 'Email confirmed'
-	check_email_code(req , res , req.body.code,req.body.email , msg);
-	// res.status(200).send({ msg: '' })
+	// check_email_code(req , res , req.body.code,req.body.email );
+	res.status(200).send({ msg: msg})
 
 }
 
 exports.UserForgetPassword = function (req, res) {
 	
-		if (req.body.email && req.body.code) {
+		if (req.body.email && req.body.code && req.body.password ) {
 			let msg = 'Password updated'
-			check_email_code(req , res , req.body.code , req.body.email , msg);
+			// check_email_code(req , res , req.body.code , req.body.email );
+			// console.log('next ..')
 			var salt = bcrypt.genSaltSync(10);
 			var hash = bcrypt.hashSync(req.body.password, salt);
-			User.updateOne({_id: result[0].user_id}, {$set: {"password": hash,}}, {new: true})
+			User.updateOne({email: req.body.email}, {$set: {"password": hash,}}, {new: true})
 			.then(result2 => {
+				console.log('done ..')
+				res.status(200).send({msg:msg})
 			})
 			.catch(err => {
 			  res.status(400).send({ msg: 'err' })

@@ -9,6 +9,7 @@ module.exports = function(path,app) {
     var check_country = require('../mw/check_country');
     var check_section = require('../mw/check_section');
     var generalUser = require('../mw/generalUser');
+    var check_code_confirmation = require('../mw/check_code_confirmation');
     
 	var User = require('../controllers/UserController');
 	var Section = require('../controllers/SectionController');
@@ -22,11 +23,11 @@ module.exports = function(path,app) {
 	app.route(`${path}/auth/registerCenterCall`).post(checkLogin_admin.checkLogin_admin,User.create_a_CenterCallUser);
 	app.route(`${path}/auth/login`).post(User.loginUser);
 
-	app.route(`${path}/email/confirmation`).post(User.confirm_email);
+	app.route(`${path}/email/confirmation`).post( check_code_confirmation.check_email_code, User.confirm_email);
 	app.route(`${path}/resend/confirmation`).post(User.resend_code);
 
 	// app.route(`${path}/center/forget`).post(checkLogin_admin.checkLogin_admin,User.ForgetPassword);
-	app.route(`${path}/user/forget`).post(User.UserForgetPassword);
+	app.route(`${path}/user/forget`).post(check_code_confirmation.check_email_code,User.UserForgetPassword);
 
 	app.route(`${path}/users`).get(checkLogin_admin.checkLogin_admin, User.users);
 	app.route(`${path}/user`).get(generalUser.generalUser, User.user_by_token);
