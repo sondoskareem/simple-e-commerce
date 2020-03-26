@@ -112,13 +112,13 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
         }else if('user_player_id'){ 
           playerId = doc.user_player_id
         }
-              // var message = { 
-              //   "app_id": "b2903fd-3291fc3be",
-              //   "contents": { "en": " Your request has bee" },
-              //   "data": { "data1": order_id},
-              //   "include_player_ids": [playerId],
-              // }
-              // sendNotification(message);
+              var message = { 
+                "app_id": "b2903fd-3291fc3be",
+                "contents": { "en": " Your request has bee" },
+                "data": { "data1": order_id},
+                "include_player_ids": [playerId],
+              }
+              sendNotification(message);
 
     res.status(200).send({data :'request has been sent'})
     }else{
@@ -127,6 +127,7 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
   });
 }
 
+//accepted and rejected actions
 exports.orderActionAccordingToUserType = (req , res)=>{
   let data = {} , Person_player_id = ' '
 
@@ -217,18 +218,18 @@ updatedOrder(Person_player_id ,(filter) , (finalData) ,order_id , req , res)
 //    updatedOrder('user_player_id' ,filter , data ,order_id , req , res)
 // }
 
-
+//get
 exports.orderForAll = (req , res)=>{
   //one function for center , admin , user , for getting order according to query params
   //we will recognize if it user or center or admin by the mw , and set the default value accordingly
   let obj2 = {}
 
-  if (req.check_center)  obj2.country_id = req.check_center.country_id
+  //we must set isActive true so user can get his order althought it active or not 
+  // admin , cneter must get only active order
+  if (req.check_center)  {obj2.country_id = req.check_center.country_id;obj2.isActive = true}
   else if (req.check_user) [obj2.user_id , obj2.rejected_by_center] = [req.check_user._id , false]
-
-  //for all 
-  obj2.isActive = true
-
+  else if(req.checkLogin_admin) obj2.isActive = true
+  
   //get the query params and convert it to map array
   const map = new Map(Object.entries(req.query));
 
@@ -253,6 +254,7 @@ query(obj , req , res , req.query.page_number , req.query.limit)
 exports.OrderTimeZoneForAdmin = (req , res)=>{
   Order.find({createdAt: { $gt: req.query.greater, $lt: req.query.smaller }  , isActive:true })
   // limit(10).
+  //2000-06-06T21:00:52
   // sort({ occupation: -1 }).
   .populate('country_id' , 'name flag')
   .populate('section_id' , 'image description')
@@ -287,7 +289,23 @@ let obj = {
 res.status(200).send({obj})
 }
 
-
+exports.deactivate_order = (req , res) =>{
+  if(req.body.greater && req.body.smaller){
+    const data = { isActive: false };
+    console.log('1')
+    Order.findOneAndUpdate({ createdAt: { $gt: req.body.greater, $lt: req.body.smaller }  , isActive:true },
+      data,
+       {new: true} ,  (err, doc) => {
+			if (err) {
+				res.status(400).send({msg :'There\'s something wrong , please try again'})
+			}
+			if(doc){
+        console.log(doc)
+				res.status(200).send({msg:' Orders has been suspended	'})
+			}
+		})
+	}
+}
 
 //param validation
  function query(params, req , res ,  page_number = 0, limit = 0 ){

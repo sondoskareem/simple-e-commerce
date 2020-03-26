@@ -227,58 +227,6 @@ exports.user_by_token = async(req , res)=>{
  }
 
 
- ///////////////////////////////////////////////////
-//  function check_email_code (req, res , code , email , next ) {
-// 	 console.log('code ' + code + '   email ' + email)
-// 	Email.find({ code: code , email:email})
-// 	  .then(result => {
-// 		  console.log(result)
-// 		if (result.length == 0) {
-// 		  res.status(400).send({ msg: "Wrong , check your code" })
-// 		} else {
-// 		  console.log("exp " + result[0].exp)
-// 		  console.log(result[0].user_id)
-// 		  var ex = moment((new Date(result[0].exp))).format('llll');
-// 		  var now = moment(Date.now()).format('llll');
-// 		  var ex1 = new Date(ex)
-// 		  var now1 = new Date(now)
-// 		  console.log('ex1   ' + ex1)
-// 		  console.log('now1   ' + now1)
-// 		  if (moment(now1).isSameOrAfter(moment(ex1))) {
-// 			  console.log('if >')
-// 			Email.deleteOne({ code: code })
-// 			  .then(resultt => {
-// 				res.status(400).send({ msg: 'Try again later' })
-// 			  })
-// 			  .catch(err => {
-// 				res.status(400).send({ msg: 'Somthing went wrong' })
-// 			  })
-// 		  } else {
-
-// 			User.updateOne({email:email}, {$set: {"isActive": true}}, {new: true})
-// 			  .then(result2 => {
-// 				  console.log('herrrrrr')
-// 				  next();
-// 				//   Email.deleteMany({ email: email , code:code })
-// 				//   .then(result3 => {
-// 				// 	  console.log('done')
-// 				//   })
-// 				//   .catch(err => {
-// 				// 	res.status(400).send({ msg: 'err' })
-// 				//   })
-// 			  })
-// 			  .catch(err => {
-// 				res.status(400).send({ msg: 'err' })
-// 			  });
-
-// 		  }
-// 		}
-// 	  })
-// 	  .catch(err => {
-// 		res.status(400).send({ msg: 'Somthing went wrong' })
-  
-// 	  })
-// }
   //////////////////////////////////////////resend code for both account activation and forgetpassword
 exports.resend_code = function (req, res) {
 	User.find({email:req.body.email })
@@ -307,11 +255,9 @@ exports.confirm_email = function(req , res){
 }
 
 exports.UserForgetPassword = function (req, res) {
-	
+	//mw for confirmation
 		if (req.body.email && req.body.code && req.body.password ) {
 			let msg = 'Password updated'
-			// check_email_code(req , res , req.body.code , req.body.email );
-			// console.log('next ..')
 			var salt = bcrypt.genSaltSync(10);
 			var hash = bcrypt.hashSync(req.body.password, salt);
 			User.updateOne({email: req.body.email}, {$set: {"password": hash,}}, {new: true})
@@ -327,4 +273,27 @@ exports.UserForgetPassword = function (req, res) {
 		  res.status(400).send({ res: 'You must enter the required field' })
 		}
 	
+}
+
+exports.centerForgetPassword = function(req , res){
+	if (req.body.email && req.body.password ) {
+		let msg = 'Password updated'
+		var salt = bcrypt.genSaltSync(10);
+		var hash = bcrypt.hashSync(req.body.password, salt);
+		console.log('1')
+		User.findOneAndUpdate({email:req.body.email , role:1}, {password : hash}, {new: true} ,  (err, doc) => {
+			if (err) {
+			  res.status(400).send({msg :'There\'s something wrong , please try again'})
+			  console.log(err)
+			}if(doc){
+				console.log(doc)
+				res.status(200).send({msg:msg})
+			}
+		})
+		// User.find({email:req.body.email})
+		// .then(result =>{console.log(result)}).catch(err=>{console.log('/')})
+	}
+	else {
+	  res.status(400).send({ res: 'You must enter the required field' })
+	}
 }

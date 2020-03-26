@@ -26,7 +26,7 @@ module.exports = function(path,app) {
 	app.route(`${path}/email/confirmation`).post( check_code_confirmation.check_email_code, User.confirm_email);
 	app.route(`${path}/resend/confirmation`).post(User.resend_code);
 
-	// app.route(`${path}/center/forget`).post(checkLogin_admin.checkLogin_admin,User.ForgetPassword);
+	app.route(`${path}/center/forget`).post(checkLogin_admin.checkLogin_admin,User.centerForgetPassword);
 	app.route(`${path}/user/forget`).post(check_code_confirmation.check_email_code,User.UserForgetPassword);
 
 	app.route(`${path}/users`).get(checkLogin_admin.checkLogin_admin, User.users);
@@ -43,6 +43,7 @@ module.exports = function(path,app) {
 	app.route(`${path}/country/suspend`).post(checkLogin_admin.checkLogin_admin, Country.CountryInactive);
 	app.route(`${path}/user/suspend`).post(checkLogin_admin.checkLogin_admin, User.UserInactive);
 	app.route(`${path}/section/suspend`).post(checkLogin_admin.checkLogin_admin, Section.SectionInactive);
+	app.route(`${path}/order/suspend`).post(checkLogin_admin.checkLogin_admin, Order.deactivate_order);
 
 	app.route(`${path}/order/create`).post(check_user.check_user,check_country.check_country, Order.add_order);
 

@@ -5,7 +5,8 @@ var nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 
 exports.send_email  = function (email , id , req , res , successMsg){
-	var shortID = shortid.generate()
+	var shortID = (Math.round(Math.random() * 899999 + 100000))
+	console.log('code   '+shortID)
 	// console.log('//////////////////////111')
 	var transporter = nodemailer.createTransport({
 		service: 'gmail',
