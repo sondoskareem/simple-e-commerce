@@ -1,6 +1,6 @@
 const Email = require('../models/email');
 var moment = require('moment');
-const shortid = require('shortid');
+// const shortid = require('shortid');
 var nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 
