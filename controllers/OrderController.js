@@ -31,7 +31,7 @@ exports.add_order =  (req, res) =>{
           var Filepath = "./public/" ;
           var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
           //local \\ , on server must split on /
-        var img = imgPath.split("\\", 2)
+        var img = imgPath.split("/", 2)
      
       console.log(img)
       // console.log(img[1])
@@ -110,8 +110,8 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
                 "app_id": "f0825492-58b0-478a-881c-51ee436d756b",
                 "contents": { "en": "View your order" },
                 "data": { "data1": order_id},
-                // "include_player_ids": [playerId],
-                "include_player_ids": ['444'],
+                "include_player_ids": [playerId],
+                // "include_player_ids": ['444'],
               }
               sendNotification(message);
 
