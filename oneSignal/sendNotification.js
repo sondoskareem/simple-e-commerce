@@ -13,10 +13,10 @@ var sendNotification = function(data) {
 // console.log(client)
   client.createNotification(data)
   .then(response => {
-    // console.log(response)
+    console.log(response)
   })
   .catch(e => {
-    // console.log(e)
+    console.log(e)
   });
 }
 module.exports =sendNotification;
