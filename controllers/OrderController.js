@@ -92,31 +92,32 @@ exports.add_order =  (req, res) =>{
 }
 
 async function updatedOrder( player_id ,filter , data , order_id , req , res) {
+  let playerId = ' '
   await Order.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
     if (err) {
-      res.status(400).send({msg :'There\'s something wrong , please try again'})
-      console.log(err)
+      res.status(400).send({msg :'There\'s something wrong ,   try again'})
+      console.log('err ' + err)
     }if(doc){
-      let playerId 
-      console.log('doc  ' +doc )
+      // console.log('OrderDoc  ' +doc )
         if(player_id == 'center_player_id'){
           playerId = doc.center_player_id
         }else if('user_player_id'){ 
           playerId = doc.user_player_id
         }
-        console.log('order_id ' + order_id)
-        console.log('playerId  ' + playerId)
+        // console.log('order_id ' + order_id)
+        // console.log('playerId  ' + playerId)
               var message = { 
                 "app_id": "f0825492-58b0-478a-881c-51ee436d756b",
                 "contents": { "en": "View your order" },
                 "data": { "data1": order_id},
-                "include_player_ids": [playerId],
+                // "include_player_ids": [playerId],
+                "include_player_ids": ['444'],
               }
               sendNotification(message);
 
     res.status(200).send({data :'request has been sent'})
     }else{
-      res.status(400).send({msg:'There\'s something wrong , please try again'})
+      // res.status(400).send({msg:'There\'s something wrong , 7please try again'})
     }
   });
 }
@@ -139,18 +140,18 @@ exports.orderActionAccordingToUserType = (req , res)=>{
     const newData ={
       count: parseInt(req.body.count) - 1 
       }
-      console.log(newData)
+      // console.log(( 'w  '+ newData))
       Section.findOneAndUpdate(req.body.section_id, newData, {
       new: true
       } ,  (err, doc) => {
       if (err) {
-        res.status(400).send({msg :'There\'s something wrong , please try again'})
+        res.status(400).send({msg :'There\'s something wrong ,3 please try again'})
       }if(doc){
-        console.log(doc)
+        // console.log('secDoc  ' +doc)
       }
     })
   }
-
+ 
   else if(req.check_user) Person_player_id = 'center_player_id'
 
 let bodyData =req.body
@@ -161,12 +162,12 @@ if(finalData.hasOwnProperty('order_id')) delete finalData.order_id
  
 
 
-console.log('bodyData  ' + JSON.stringify(finalData))
-console.log('player_id  ' + Person_player_id)
-console.log(  '  order_id  '+ order_id)
-console.log('filter  ' + JSON.stringify(filter))
+// console.log('bodyData  ' + JSON.stringify(finalData))
+// console.log('player_id  ' + Person_player_id)
+// console.log(  '  order_id  '+ order_id)
+// console.log('filter  ' + JSON.stringify(filter))
 
-updatedOrder(Person_player_id ,(filter) , (finalData) ,order_id , req , res)
+updatedOrder(Person_player_id ,JSON.stringify(filter) , (finalData) ,order_id , req , res)
   
 }
 // exports.accepted_by_center = (req , res) =>{
