@@ -113,7 +113,7 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
                 "include_player_ids": [playerId],
                 // "include_player_ids": ['444'],
               }
-              // sendNotification(message);
+              sendNotification(message);
 
     res.status(200).send({data :'request has been sent'})
     }else{
