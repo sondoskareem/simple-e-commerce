@@ -31,7 +31,7 @@ exports.add_order =  (req, res) =>{
           var Filepath = "./public/" ;
           var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
           //local \\ , on server must split on /
-        var img = imgPath.split("/", 2)
+        var img = imgPath.split("\\", 2)
      
       console.log(img)
       // console.log(img[1])
@@ -79,14 +79,6 @@ exports.add_order =  (req, res) =>{
               // console.log(req.check_section._id)
 
             res.status(200).send({msg:'You\'r request has been sent successfuly' })
-            // console.log(result._id)
-            //   var message = { 
-            //     "app_id": "b2903fd-3291fc3be",
-            //     "contents": { "en": " Your request has bee" },
-            //     "data": { "data1": result[0]._id},
-            //     "include_player_ids": [req.check_user.player_id],
-            //   }
-            //   sendNotification(message);
           })
           .catch(err =>{
             res.status(400).send({msg:'Somethis wrong'})
@@ -112,9 +104,11 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
         }else if('user_player_id'){ 
           playerId = doc.user_player_id
         }
+        console.log('order_id ' + order_id)
+        console.log('playerId  ' + playerId)
               var message = { 
-                "app_id": "b2903fd-3291fc3be",
-                "contents": { "en": " Your request has bee" },
+                "app_id": "f0825492-58b0-478a-881c-51ee436d756b",
+                "contents": { "en": "View your order" },
                 "data": { "data1": order_id},
                 "include_player_ids": [playerId],
               }
