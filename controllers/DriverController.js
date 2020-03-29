@@ -5,6 +5,7 @@ var moment = require('moment');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Driver = require('../models/driver')
+const User = require('../models/users')
 var UserValidation = require('../validation/UserValidation');
 // const config_token = require("../config/token")
 // const config_token = process.env.TOKEN
@@ -12,13 +13,11 @@ const config_token ='_tT76___z0@k044sokiu8792^)sdZZz$$'
 
 const uuidv1 = require('uuid/v1');
 var base64Img = require('base64-img');
-var check_user = require('../mw/check_user');
  function  loadImage(base64String  , req , res){
 	var name = uuidv1();
 	var Filepath = "./public/" ;
 	var imgPath = base64Img.imgSync(base64String, Filepath, name);
 	  var img = imgPath.split("/", 2)
-	  console.log(' oo   '+img[1])
 	return img[1];
 }
 exports.CreateDriver = (req , res)=>{
@@ -43,7 +42,20 @@ exports.CreateDriver = (req , res)=>{
 			  });
 			  driver.save()
 			  .then(result =>{
-				  res.status(200).send({data:'Your request has been sent'})	
+				const data = {
+					role : 4
+				}
+				User.findOneAndUpdate({_id: req.check_user._id , isActive:true },
+					data,
+					 {new: true} ,  (err, doc) => {
+						  if (err) {
+							  res.status(400).send({msg :'There\'s something wrong , please try again'})
+						  }
+						  if(doc){
+					  console.log(doc)
+					  res.status(200).send({data:'Your request has been sent'})	
+					}
+					  })
 					  })
 			  .catch(err =>{
 				 res.status(400).send({ msg: 'Somthing wrong try again later ' });
