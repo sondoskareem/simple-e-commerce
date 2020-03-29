@@ -117,7 +117,7 @@ async function updatedOrder( player_id ,filter , data , order_id , req , res) {
 
     res.status(200).send({data :'request has been sent'})
     }else{
-      // res.status(400).send({msg:'There\'s something wrong , 7please try again'})
+      res.status(400).send({msg:'There\'s something wrong , 7please try again'})
     }
   });
 }
