@@ -188,7 +188,6 @@ exports.loginUser =  (req, res)=> {
 }
 
 
-
 // && req.query.role == 3
 exports.users = async(req , res) => {
 	if(req.query.role == 1 || req.query.role == 0 ){
