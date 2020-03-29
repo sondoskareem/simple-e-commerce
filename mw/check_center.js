@@ -25,7 +25,6 @@ exports.check_center= function (req, res, next) {
 								req.check_center = user
 								next()
 						} else {
-							// console.log('err')
 							res.status(401).send({ msg: 'Unauthorized' })
 						}
 					})

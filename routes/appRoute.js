@@ -1,13 +1,10 @@
 'use strict';
 
 module.exports = function(path,app) {
-	// var UsersMW = require('../mw/check_user');
-	// var licensecheck = require('../mw/license_check');
     var checkLogin_admin = require('../mw/check_login');
     var check_user = require('../mw/check_user');
     var check_center = require('../mw/check_center');
     var check_country = require('../mw/check_country');
-    var check_section = require('../mw/check_section');
     var generalUser = require('../mw/generalUser');
     var check_code_confirmation = require('../mw/check_code_confirmation');
     
@@ -16,7 +13,6 @@ module.exports = function(path,app) {
 	var Order = require('../controllers/OrderController');
 	var Country = require('../controllers/CountryController');
 	var Driver = require('../controllers/DriverController');
-	var Charge = require('../controllers/ChargeController');
 	
 	app.route(`${path}/auth/admin`).post(User.CreateAdmin);
 	app.route(`${path}/auth/register`).post(User.create_a_User);
@@ -61,7 +57,6 @@ module.exports = function(path,app) {
 	app.route(`${path}/driver`).post(check_user.check_user, Driver.CreateDriver);
 	app.route(`${path}/driver`).get(checkLogin_admin.checkLogin_admin, Driver.getDrivers);
 
-	app.route(`${path}/charge`).post(check_user.check_user, Charge.charge);
 
 	app.route(`${path}/ordeers`).get(check_center.check_center, Order.orderActionAccordingToUserType);
 

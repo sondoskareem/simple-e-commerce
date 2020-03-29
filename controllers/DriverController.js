@@ -13,19 +13,14 @@ const config_token ='_tT76___z0@k044sokiu8792^)sdZZz$$'
 const uuidv1 = require('uuid/v1');
 var base64Img = require('base64-img');
 var check_user = require('../mw/check_user');
-
-
  function  loadImage(base64String  , req , res){
 	var name = uuidv1();
 	var Filepath = "./public/" ;
 	var imgPath = base64Img.imgSync(base64String, Filepath, name);
-          //local \\ , on server must split on /
-
 	  var img = imgPath.split("/", 2)
 	  console.log(' oo   '+img[1])
 	return img[1];
 }
-
 exports.CreateDriver = (req , res)=>{
 	const validating = UserValidation.new_driver(req.body);
 	if (validating.error) {
@@ -33,8 +28,6 @@ exports.CreateDriver = (req , res)=>{
 		msg: validating.error.details[0].message
 	  })
 	} else {
-		// console.log(loadImage(req.body.id_front , req , res ))
-		
 			const driver = new Driver({
 				_id: new mongoose.Types.ObjectId(),
 				id_front: loadImage(req.body.id_front , req , res ),
@@ -50,21 +43,16 @@ exports.CreateDriver = (req , res)=>{
 			  });
 			  driver.save()
 			  .then(result =>{
-				//role might be change , but not know
 				  res.status(200).send({data:'Your request has been sent'})	
 					  })
 			  .catch(err =>{
 				 res.status(400).send({ msg: 'Somthing wrong try again later ' });
 			  })
 	}  
-
-
 }
-
 exports.getDrivers = async(req , res) =>{
 	await Driver.find({})
 	.populate({ path: 'user_id',  populate: { path: 'country_id' } , select : 'name phone email location  '  })
-	// .populate('user_id' , 'name phone email location  ')
 	.then(result =>{
 	  res.status(200).send({data:result})
 	})

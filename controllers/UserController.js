@@ -13,7 +13,6 @@ var UserValidation = require('../validation/UserValidation');
 const config_token ='_tT76___z0@k044sokiu8792^)sdZZz$$'
 const Email = require('../models/email');
 
-// function updateCountryIfRoleOne(req)
 function CreateUser(role ,active, req , res){
 	let successMsg = 'Registeration done , please confirm your email '
 	const validating = UserValidation.new_user(req.body);
@@ -79,13 +78,8 @@ function CreateUser(role ,active, req , res){
 	}  
 }
 exports.CreateAdmin = ( req , res) => {
-	// res.send('helllllllllo')
 		var salt = bcrypt.genSaltSync(10);
 		var hash = bcrypt.hashSync(req.body.password, salt);
-
-		// console.log(salt)
-		// console.log(hash)
-		// res.send('/')
 			const user = new User({
 				_id: new mongoose.Types.ObjectId(),
 				name: req.body.name,
@@ -128,7 +122,6 @@ exports.CreateAdmin = ( req , res) => {
 
 exports.create_a_User = function (req, res) {
 	CreateUser(0 ,false, req, res);
-
 }
 
 exports.create_a_CenterCallUser = (req , res)=>{
@@ -137,17 +130,11 @@ exports.create_a_CenterCallUser = (req , res)=>{
 
 exports.loginUser =  (req, res)=> {
 	if (req.body.email && req.body.password &&req.body.player_id) {
-		console.log(JSON.stringify(req.body))
 		  User.find({ email: req.body.email})
 			.then(result => {
-				console.log(result)
-
 				var usercheck = bcrypt.compareSync(req.body.password, result[0].password);
-				// console.log(usercheck)
           if (usercheck) {
              if(result[0].isActive){ 
-				// console.log('result')
-
 				const filter = { email: req.body.email };
 				const data = { player_id: req.body.player_id };
 				User.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
@@ -158,9 +145,6 @@ exports.loginUser =  (req, res)=> {
                 exp: Math.floor(Date.now() / 1000) + (32832000),
                 id: result[0]._id,
               },config_token);
-			//  console.log(result[0])
-			// console.log(result[0])
-			console.log('LOGIN req.body.player_id    ' + req.body.player_id)
 			  var obj = {
 				token:token,
 				role:result[0].role,
@@ -180,15 +164,11 @@ exports.loginUser =  (req, res)=> {
 	})
 	.catch(err =>{
 		res.status(400).send({msg:'incorrect email or password'})
-		// res.status(400).send({msg:err})
 	})
 	}else{
 		res.status(400).send({msg:'All inputs required'})
 	}
 }
-
-
-// && req.query.role == 3
 exports.users = async(req , res) => {
 	if(req.query.role == 1 || req.query.role == 0 ){
 		await User.find({role:req.query.role , isActive:true})
@@ -223,9 +203,6 @@ if(req.body.id){
 exports.user_by_token = async(req , res)=>{
 	 res.status(200).send({data:req.generalUser})
  }
-
-
-  //////////////////////////////////////////resend code for both account activation and forgetpassword
 exports.resend_code = function (req, res) {
 	User.find({email:req.body.email })
 	  .then(result => {
@@ -243,8 +220,6 @@ exports.resend_code = function (req, res) {
 	  })
   
 }
-
-//account activation
 exports.confirm_email = function(req , res){
 	let msg = 'Email confirmed'
 	// check_email_code(req , res , req.body.code,req.body.email );
@@ -253,14 +228,12 @@ exports.confirm_email = function(req , res){
 }
 
 exports.UserForgetPassword = function (req, res) {
-	//mw for confirmation
 		if (req.body.email && req.body.code && req.body.password ) {
 			let msg = 'Password updated'
 			var salt = bcrypt.genSaltSync(10);
 			var hash = bcrypt.hashSync(req.body.password, salt);
 			User.updateOne({email: req.body.email}, {$set: {"password": hash,}}, {new: true})
 			.then(result2 => {
-				console.log('done ..')
 				res.status(200).send({msg:msg})
 			})
 			.catch(err => {
@@ -288,8 +261,6 @@ exports.centerForgetPassword = function(req , res){
 				res.status(200).send({msg:msg})
 			}
 		})
-		// User.find({email:req.body.email})
-		// .then(result =>{console.log(result)}).catch(err=>{console.log('/')})
 	}
 	else {
 	  res.status(400).send({ res: 'You must enter the required field' })

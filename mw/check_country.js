@@ -3,12 +3,10 @@ const User = require('../models/users')
 
 exports.check_country= function (req, res, next) {
 	var country_id = req.body.country_id
-	console.log('ios c ' + req.body)
 	
     Country.findOne({_id: country_id  , isActive:true})
 		.then(result =>{
             if(result){ 
-console.log('result ' + result)
                 User.find({country_id:result._id , isActive:true , role:1})
                 .then(userREsult =>{
                    if(userREsult){
@@ -17,7 +15,6 @@ console.log('result ' + result)
                         obj.push(user.player_id)
                         
                     })
-                    console.log(' obj     ' + obj)
                     req.check_country = obj
                     next()
                 }else{

@@ -7,11 +7,9 @@ var base64Img = require('base64-img');
 
 exports.add_section = (req , res)=>{
 	if(req.body.file){
-        // console.log(req.body.file)
           var name = uuidv1();
           var Filepath = "./public/" ;
           var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
-          //local \\ , on server must split on /
         var img = imgPath.split("/", 2)
      
     const section = new Sections({
@@ -41,7 +39,6 @@ exports.update = (req , res) => {
 		var name = uuidv1();
 		var Filepath = "./public/" ;
 		var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
-		//local \\ , on server must split on /
 	  	var img = imgPath.split("/", 2)
 			data.image=img[1] 
 	}

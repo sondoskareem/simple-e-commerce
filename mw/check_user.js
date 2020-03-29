@@ -9,13 +9,10 @@ exports.check_user= function (req, res, next) {
 	var token = req.headers.token
 	if (token) {
 		try {
-	console.log('ios  u ' + req.body)
-
 			jwt.verify(token, config_token,
 				function (err, decoded) { 
 					if (err) {
-						// res.status(401).send({ msg: 'There\'s something wrong' })
-						res.status(401).send({ msg: err })
+						res.status(401).send({ msg: 'There\'s something wrong' })
 					}
 					User.findOne({
 						_id: decoded.id
@@ -29,7 +26,6 @@ exports.check_user= function (req, res, next) {
 								req.check_user = user
 								next()
 						} else {
-							// console.log('err')
 							res.status(401).send({ msg: 'Unauthorized' })
 						}
 					})

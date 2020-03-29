@@ -9,8 +9,6 @@ const appId = 'f0825492-58b0-478a-881c-51ee436d756b'
 var sendNotification = function(data) {
 
   const client = new OneSignal.Client(appId, apiKey);
-// console.log('hellllllllllo')
-// console.log(client)
   client.createNotification(data)
   .then(response => {
     console.log(response)

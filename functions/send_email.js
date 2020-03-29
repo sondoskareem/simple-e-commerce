@@ -1,13 +1,11 @@
 const Email = require('../models/email');
 var moment = require('moment');
-// const shortid = require('shortid');
 var nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 
 exports.send_email  = function (email , id , req , res , successMsg){
 	var shortID = (Math.round(Math.random() * 899999 + 100000))
 	console.log('code   '+shortID)
-	// console.log('//////////////////////111')
 	var transporter = nodemailer.createTransport({
 		service: 'gmail',
 		auth: {
@@ -18,24 +16,18 @@ exports.send_email  = function (email , id , req , res , successMsg){
 		  rejectUnauthorized: false
 		}
 	  });
-	  console.log('2000')
-
 	  var mailOptions = {
 		from: 'shopping@gmail.com',
 		to:email,
 		subject: 'Account validation',
 		html: `<p> confirmation code :  \n <h2> ${shortID} </h2></p>`
 	  };
-	  console.log('3000')
-
 	  transporter.sendMail(mailOptions, function (error, info) {
-		//   console.log('fun not working ')
 		if (error) {
 			console.log(error)
 		  res.status(400).send({ msg: 'err' })
 		} else {
 			console.log('inside222')
-			// Email.deleteMany({user_id:id}).then(resulttt=>{
 				const newemail = new Email({
 					_id: new mongoose.Types.ObjectId(),
 					code: shortID,
@@ -45,16 +37,10 @@ exports.send_email  = function (email , id , req , res , successMsg){
 				  })
 				  newemail.save()
 			.then(result1 => {
-			   console.log('cooooooodeee  '+result1)
-			//    res.status(200).send({msg:'Registration Done'})
 			})
 			.catch(err => {
 				res.status(400).send({msg:'err'})
 			})
-			// }).catch(err=>{})
-		  
-	  console.log('4000')
-
 		}
 	  });
 }

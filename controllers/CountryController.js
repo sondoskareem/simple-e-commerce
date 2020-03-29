@@ -7,15 +7,11 @@ var base64Img = require('base64-img');
 
 exports.add_country = (req , res)=>{
     if(req.body.file){
-      console.log(req.body)
-            // console.log(req.body.file)
           var name = uuidv1();
           var 
           Filepath = "./public/" ;
           var imgPath = base64Img.imgSync(req.body.file, Filepath, name);
-          //local \\ , on server must split on /
           var img = imgPath.split("/", 2)
-          console.log('image url   ' + img[1])
         const country = new Country({
             _id: new mongoose.Types.ObjectId(),
             name: req.body.name,
@@ -42,14 +38,12 @@ exports.add_country = (req , res)=>{
 exports.update = async(req , res) => {
 	if(!req.body.name){
 		res.send.status(400).send({msg :'Please inter the required field'})
-
 	}else{
 		const data = { 
 			name: req.body.name ,
 			updateddAt: moment().format('DD/MM/YYYY')
 			};
 			const filter = { _id:req.body.id ,isActive:true}
-
 		await Country.findOneAndUpdate(filter, data, {
 			new: true
 		  } ,  (err, doc) => {
