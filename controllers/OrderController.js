@@ -128,8 +128,6 @@ const filter = {_id:req.body.order_id}
 if(finalData.hasOwnProperty('order_id')) delete finalData.order_id
 updatedOrder(Person_player_id ,(filter) , (finalData) ,order_id , req , res)
 }
-
-//get
 exports.orderForAll = (req , res)=>{
   let obj2 = {}
   if (req.check_center)  {obj2.country_id = req.check_center.country_id;obj2.isActive = true}
@@ -142,8 +140,6 @@ exports.orderForAll = (req , res)=>{
   obj = Object.assign(obj2, obj)
 query(obj , req , res , req.query.page_number , req.query.limit)
 }
-  
-
 exports.OrderTimeZoneForAdmin = (req , res)=>{
   Order.find({createdAt: { $gt: req.query.greater, $lt: req.query.smaller }  , isActive:true })
   .populate('country_id' , 'name flag')
@@ -156,12 +152,10 @@ exports.OrderTimeZoneForAdmin = (req , res)=>{
     res.status(400).send({msg:'err'})
   })
 }     
-
-
 exports.Subtraction_OrderTimeZoneForAdmin = (req , res)=>{
     
- var a =  moment((new Date(req.query.greater)));
-  var b = moment((new Date(req.query.smaller)));
+var a =  moment((new Date(req.query.greater)));
+var b = moment((new Date(req.query.smaller)));
 let obj = {
   minutes : a.diff(b, 'minutes'),
   hours : a.diff(b, 'hours'),
