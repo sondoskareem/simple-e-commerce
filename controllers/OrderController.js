@@ -162,12 +162,12 @@ if(finalData.hasOwnProperty('order_id')) delete finalData.order_id
  
 
 
-// console.log('bodyData  ' + JSON.stringify(finalData))
-// console.log('player_id  ' + Person_player_id)
-// console.log(  '  order_id  '+ order_id)
-// console.log('filter  ' + JSON.stringify(filter))
+console.log('bodyData  ' + JSON.stringify(finalData))
+console.log('player_id  ' + Person_player_id)
+console.log(  '  order_id  '+ order_id)
+console.log('filter  ' + JSON.stringify(filter))
 
-updatedOrder(Person_player_id ,JSON.stringify(filter) , (finalData) ,order_id , req , res)
+updatedOrder(Person_player_id ,(filter) , (finalData) ,order_id , req , res)
   
 }
 // exports.accepted_by_center = (req , res) =>{
