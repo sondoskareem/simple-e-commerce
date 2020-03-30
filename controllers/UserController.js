@@ -35,8 +35,8 @@ function CreateUser(role ,active, req , res){
 				player_id: req.body.player_id,
 				country_id: req.body.country_id,
 				count: req.body.count,
-				createdAt:  moment().format('DD/MM/YYYY'),
-				updateddAt: moment().format('DD/MM/YYYY'),
+				createdAt:  moment().format('llll'),
+				updateddAt: moment().format('llll'),
 			  });
 			  console.log(role)
 			  if(role === 1){
@@ -57,8 +57,8 @@ function CreateUser(role ,active, req , res){
 			}
 			  user.save()
 				.then(result =>{
-					console.log(result.email +' .. '+ result._id +' .. '+ result.isActive)
-						if(active === false) send_email.send_email(result.email, result._id , req , res)
+					console.log(result.email +result.createdAt+' .. '+ result._id +' .. '+ result.isActive)
+						if(active === false) send_email.send_email(result.email, result.createdAt,result._id , req , res)
 						
 						res.status(200).send({msg : successMsg})	
 						})
@@ -119,6 +119,7 @@ exports.CreateAdmin = ( req , res) => {
 				 res.status(400).send({ msg: msg });
 			  })
 }
+
 
 exports.create_a_User = function (req, res) {
 	CreateUser(0 ,false, req, res);
@@ -206,12 +207,10 @@ exports.user_by_token = async(req , res)=>{
 exports.resend_code = function (req, res) {
 	User.find({email:req.body.email })
 	  .then(result => {
-		  console.log(result.length == 0)
 		if (result.length == 0) {
 		  res.status(400).send({ msg: 'No users found with this email' })
 		} else {
-			console.log(result[0].email , result[0]._id)
-			send_email.send_email(result[0].email, result[0]._id , req , res)
+			send_email.send_email(result[0].email,req.body.time, result[0]._id , req , res)
 			res.status(200).send({msg:'code has been sent'})
 		}
 	  })

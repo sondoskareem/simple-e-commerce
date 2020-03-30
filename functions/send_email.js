@@ -3,7 +3,9 @@ var moment = require('moment');
 var nodemailer = require('nodemailer');
 const mongoose = require('mongoose');
 
-exports.send_email  = function (email , id , req , res , successMsg){
+exports.send_email  = function (email,time , id , req , res , successMsg){
+	var time = moment((new Date(time))).format('llll');
+	var newEx =  moment(time).add(1, 'hours').format('llll')
 	var shortID = (Math.round(Math.random() * 899999 + 100000))
 	console.log('code   '+shortID)
 	var transporter = nodemailer.createTransport({
@@ -33,7 +35,7 @@ exports.send_email  = function (email , id , req , res , successMsg){
 					code: shortID,
 					email: email,
 					user_id: id,
-					exp: moment().add(1, 'hours').format('llll')
+					exp: newEx
 				  })
 				  newemail.save()
 			.then(result1 => {
