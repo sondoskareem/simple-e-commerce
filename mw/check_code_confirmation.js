@@ -19,6 +19,7 @@ exports.check_email_code= function (req, res, next) {
          var now = moment(Date.now()).format('llll');
          var ex1 = new Date(ex)
          var now1 = new Date(now)
+	   
          if (moment(now1).isSameOrAfter(moment(ex1))) {
            Email.deleteOne({ code: code })
              .then(resultt => {

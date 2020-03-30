@@ -35,16 +35,16 @@ function CreateUser(role ,active, req , res){
 				player_id: req.body.player_id,
 				country_id: req.body.country_id,
 				count: req.body.count,
-				createdAt:  moment().format('llll'),
-				updateddAt: moment().format('llll'),
+				createdAt:  req.body.time,
+				updateddAt: req.body.time,
 			  });
-			  console.log(role)
+			//   console.log(role)
 			  if(role === 1){
 				successMsg = 'Registeration done'
 				  const data ={
 					count: parseInt(req.body.count) + 1 
 				  }
-				  console.log(data)
+				//   console.log(data)
 				  Country.findOneAndUpdate(req.body.country_id, data, {
 					new: true
 				  } ,  (err, doc) => {
@@ -57,11 +57,8 @@ function CreateUser(role ,active, req , res){
 			}
 			  user.save()
 				.then(result =>{
-					console.log(result.email +result.createdAt+' .. '+ result._id +' .. '+ result.isActive)
-						if(active === false) send_email.send_email(result.email, result.createdAt,result._id , req , res)
-						
-						res.status(200).send({msg : successMsg})	
-						})
+						if(active === false) send_email.send_email(result.email, req.body.time,result._id , req , res)
+						res.status(200).send({msg : successMsg})})
 				.catch(err =>{
 					var msg
 					if(err.name === 'MongoError' && err.code === 11000){

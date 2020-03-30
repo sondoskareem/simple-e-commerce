@@ -12,6 +12,7 @@ exports.new_user=function (User) {
         'player_id':Joi.string().required(),
         'country_id' :Joi.string().required(),
         'count':Joi.string().required(),
+        'time':Joi.string().required(),
     }
     return Joi.validate(User, UserSchema);
 }
