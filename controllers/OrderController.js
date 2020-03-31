@@ -168,13 +168,14 @@ res.status(200).send({obj})
 exports.deactivate_order = (req , res) =>{
   if(req.body.greater && req.body.smaller){
     const data = { isActive: false };
-    console.log('1')
+    // console.log()
+    // console.log('1')
     Order.find({ createdAt: { $gt: req.body.greater, $lt: req.body.smaller }  , isActive:true })
     .then(result3=>{
       if(result3.length == 0){
         res.status(400).send({msg:'There is no order with this date'})
       }else{
-        Order.findOneAndUpdate({ createdAt: { $gt: req.body.greater, $lt: req.body.smaller }  , isActive:true },
+        Order.updateMany({ createdAt: { $gt: req.body.greater, $lt: req.body.smaller }  , isActive:true },
           data,
            {new: true} ,  (err, doc) => {
           if (err) {
