@@ -169,17 +169,27 @@ exports.deactivate_order = (req , res) =>{
   if(req.body.greater && req.body.smaller){
     const data = { isActive: false };
     console.log('1')
-    Order.findOneAndUpdate({ createdAt: { $gt: req.body.greater, $lt: req.body.smaller }  , isActive:true },
-      data,
-       {new: true} ,  (err, doc) => {
-			if (err) {
-				res.status(400).send({msg :'There\'s something wrong , please try again'})
-			}
-			if(doc){
-        console.log(doc)
-				res.status(200).send({msg:' Orders has been suspended	'})
-			}
-		})
+    Order.find({ createdAt: { $gt: req.body.greater, $lt: req.body.smaller }  , isActive:true })
+    .then(result3=>{
+      if(result3.length == 0){
+        res.status(400).send({msg:'There is no order with this date'})
+      }else{
+        Order.findOneAndUpdate({ createdAt: { $gt: req.body.greater, $lt: req.body.smaller }  , isActive:true },
+          data,
+           {new: true} ,  (err, doc) => {
+          if (err) {
+            res.status(400).send({msg :'There\'s something wrong , please try again'})
+          }
+          if(doc){
+            console.log(doc)
+            res.status(200).send({msg:' Orders has been suspended	'})
+          }
+        })
+      }
+    })
+    .catch(err =>{
+        res.status(400).send({msg:'Err'})
+    })
 	}
 }
 
