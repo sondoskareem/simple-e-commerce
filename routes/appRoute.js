@@ -6,8 +6,12 @@ module.exports = function(path,app) {
     var check_center = require('../mw/check_center');
     var check_country = require('../mw/check_country');
     var generalUser = require('../mw/generalUser');
-    var check_code_confirmation = require('../mw/check_code_confirmation');
-    
+	var check_code_confirmation = require('../mw/check_code_confirmation');
+	
+	var center_accepted = require('../functions/orderActionValidateMW/center_accepted');
+	var center_rejected = require('../functions/orderActionValidateMW/center_rejected');
+	var user_accepted = require('../functions/orderActionValidateMW/user_accepted');
+	
 	var User = require('../controllers/UserController');
 	var Section = require('../controllers/SectionController');
 	var Order = require('../controllers/OrderController');
@@ -43,9 +47,9 @@ module.exports = function(path,app) {
 
 	app.route(`${path}/order/create`).post(check_user.check_user,check_country.check_country, Order.add_order);
 
-	app.route(`${path}/order/acceptedByCenter`).post(check_center.check_center, Order.orderActionAccordingToUserType);
-	app.route(`${path}/order/rejectedByCenter`).post(check_center.check_center, Order.orderActionAccordingToUserType);
-	app.route(`${path}/order/acceptedByUser`).post(check_user.check_user, Order.orderActionAccordingToUserType);
+	app.route(`${path}/order/acceptedByCenter`).post(check_center.check_center,center_accepted.center_accepted, Order.orderActionAccordingToUserType);
+	app.route(`${path}/order/rejectedByCenter`).post(check_center.check_center,center_rejected.center_rejected, Order.orderActionAccordingToUserType);
+	app.route(`${path}/order/acceptedByUser`).post(check_user.check_user,user_accepted.user_accepted, Order.orderActionAccordingToUserType);
 
 	app.route(`${path}/order/center`).get(check_center.check_center, Order.orderForAll);
 	app.route(`${path}/order/user`).get(check_user.check_user, Order.orderForAll);

@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users')
 const send_email = require('../functions/send_email')
+const NotEmpty = require('../functions/NotEmpty')
 const Country = require('../models/country')
 var UserValidation = require('../validation/UserValidation');
 // const config_token = require("../config/token")
@@ -127,14 +128,15 @@ exports.create_a_CenterCallUser = (req , res)=>{
 }
 
 exports.loginUser =  (req, res)=> {
-	if (req.body.email && req.body.password &&req.body.player_id) {
+	console.log('1  '+ NotEmpty.NotEmpty(req.body.player_id))
+	if (req.body.email && req.body.password && NotEmpty.NotEmpty(req.body.player_id) ) {
 		  User.find({ email: req.body.email})
 			.then(result => {
 				var usercheck = bcrypt.compareSync(req.body.password, result[0].password);
           if (usercheck) {
              if(result[0].isActive){ 
 				const filter = { email: req.body.email };
-				const data = { player_id: req.body.player_id };
+				const data = { player_id: (req.body.player_id).trim() };
 				User.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
 					if (err) {
 						res.status(400).send({msg :'There\'s something wrong , please try again'})
@@ -262,3 +264,4 @@ exports.centerForgetPassword = function(req , res){
 	  res.status(400).send({ res: 'You must enter the required field' })
 	}
 }
+
