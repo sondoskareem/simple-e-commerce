@@ -137,6 +137,7 @@ exports.loginUser =  (req, res)=> {
              if(result[0].isActive){ 
 				const filter = { email: req.body.email };
 				const data = { player_id: (req.body.player_id).trim() };
+				console.log('data' + data)
 				User.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
 					if (err) {
 						res.status(400).send({msg :'There\'s something wrong , please try again'})

@@ -78,7 +78,7 @@ exports.add_order =  (req, res) =>{
 async function updatedOrder( player_id ,filter , data , order_id , req , res) {
   let playerId = ' '
   if(checkObj.ObjNotExpected(data) == true){
-console.log('All true')
+// console.log('All true')
   await Order.findOneAndUpdate(filter, data, {new: true} ,  (err, doc) => {
     if (err) {
       res.status(400).send({msg :'There\'s something wrong ,   try again'})
@@ -94,7 +94,7 @@ console.log('All true')
                 "data": { "data1": order_id},
                 "include_player_ids": [playerId],
               }
-              // sendNotification(message);
+              sendNotification(message);
     res.status(200).send({data :'request has been sent'})
     }else{
       res.status(400).send({msg:'There\'s something wrong , please try again'})
@@ -111,51 +111,23 @@ exports.orderActionAccordingToUserType = (req , res)=>{
     if (req.check_center){
       console.log(req.url)
       if(req.url == '/api/v1/order/rejectedByCenter'){
-      //   console.log('rejectedByCenter')
-      //    validating = UserValidation.Reject_Center(req.body);
-      //   if (validating.error) res.status(400).send({ msg: validating.error.details[0].message })
         [data.price , data.arrivalAt , data.rejected_by_center , data.accepted_by_center] = [' ' , ' ' , true , false]
       }
-      // else if(req.url == '/api/v1/order/acceptedByCenter'){
-      //    validating = UserValidation.Accept_Center(req.body);
-      //   // console.log(validating.error)
-      //   console.log('accepted')
-      //   if (!validating.error) res.status(400).send({ msg: validating.error.details[0].message })
-      // }    
-      // console.log('NNON')
-
       data.center_player_id = req.check_center.player_id
       Person_player_id = 'user_player_id'
-      // console.log('herrre '+NotEmpty.NotEmpty(req.body.count))
-      // if (NotEmpty.NotEmpty(req.body.count)){
         const newData ={
           count: parseInt(req.body.count) - 1
           }
-          Section.findOneAndUpdate(req.body.section_id, newData, {
-          new: true
-          } ,  (err, doc) => {
-          if (err) {
-            console.log('err')
+          Section.findOneAndUpdate(req.body.section_id, newData, {new: true} ,  (err, doc) => {
+          if (err) {console.log('err')
             res.status(400).send({msg :'There\'s something wrong ,please try again'})
           }if(doc){
-            // console.log('secDoc  ' +doc)
-          } 
-        })
-      // }  
-    }
-    // else if(req.check_user) {
-    //   Person_player_id = 'center_player_id'
-    //    validating = UserValidation.User_Accept(req.body);
-    //    console.log('User'+validating.error)
-
-    //   if (validating.error) res.status(400).send({ msg: validating.error.details[0].message })
-    // }
-let bodyData =req.body
-let finalData = Object.assign(bodyData, data)
-const order_id = req.body.order_id
-const filter = {_id:req.body.order_id}
-if(finalData.hasOwnProperty('order_id')) delete finalData.order_id
-console.log('doooooooone')
+          }})}else if(req.check_user) Person_player_id = 'center_player_id'
+      let bodyData =req.body
+      let finalData = Object.assign(bodyData, data)
+      const order_id = req.body.order_id
+      const filter = {_id:req.body.order_id}
+      if(finalData.hasOwnProperty('order_id')) delete finalData.order_id
 updatedOrder(Person_player_id ,(filter) , (finalData) ,order_id , req , res)
 }
 exports.orderForAll = (req , res)=>{
