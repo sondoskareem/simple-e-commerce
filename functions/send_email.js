@@ -10,7 +10,7 @@ exports.send_email  = function (email,time , id , req , res , successMsg){
 	var transporter = nodemailer.createTransport({
 		service: 'gmail',
 		auth: {
-		  user: 'shoppingorder8@gmail.com',
+		  user: 'shoppingorder10@gmail.com',
 		  pass: 'Baghdad111'
 		},
 		tls: {
@@ -37,6 +37,7 @@ exports.send_email  = function (email,time , id , req , res , successMsg){
 				  })
 				  newemail.save()
 			.then(result1 => {
+				console.log(info)
 			})
 			.catch(err => {
 				res.status(400).send({msg:'err'})
