@@ -1,8 +1,6 @@
 let User = require("../models/users");
 var jwt = require('jsonwebtoken');
-// const config_token = require("../config/token")
-// const config_token = process.env.TOKEN
-const config_token ='_tT76___z0@k044sokiu8792^)sdZZz$$'
+const config_token = process.env.TOKEN
 
 exports.checkLogin_admin= function (req, res, next) {
 	var token = req.headers.token
@@ -17,9 +15,6 @@ exports.checkLogin_admin= function (req, res, next) {
 						_id: decoded.id
 						, isActive:true
 					}, (err, user) => {
-						if (err) {
-							res.status(401).send({ msg: err })
-						}
 						if (user && user.role == 2) {
 								req.checkLogin_admin = user
 								next()
