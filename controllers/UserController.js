@@ -9,9 +9,7 @@ const send_email = require('../functions/send_email')
 const NotEmpty = require('../functions/NotEmpty')
 const Country = require('../models/country')
 var UserValidation = require('../validation/UserValidation');
-// const config_token = require("../config/token")
-// const config_token = process.env.TOKEN
-const config_token ='_tT76___z0@k044sokiu8792^)sdZZz$$'
+const config_token = process.env.TOKEN
 const Email = require('../models/email');
 
 function CreateUser(role ,active, req , res){

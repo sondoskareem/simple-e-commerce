@@ -4,8 +4,9 @@ const OneSignal = require('onesignal-node');
 // require('dotenv').config();
 // rest api key = process.env.api-key ..
 // appId = process.env.appId
-const apiKey = 'NTA5NDlkMDItYjQyMS00ODdjLWFlNzMtYWMzNDI1Nzg1OGUz'
-const appId = 'f0825492-58b0-478a-881c-51ee436d756b'
+const apiKey = process.env.apiKey
+const appId = process.env.appId
+
 var sendNotification = function(data) {
 
   const client = new OneSignal.Client(appId, apiKey);

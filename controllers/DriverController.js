@@ -7,9 +7,7 @@ const jwt = require('jsonwebtoken');
 const Driver = require('../models/driver')
 const User = require('../models/users')
 var UserValidation = require('../validation/UserValidation');
-// const config_token = require("../config/token")
-// const config_token = process.env.TOKEN
-const config_token ='_tT76___z0@k044sokiu8792^)sdZZz$$'
+const config_token = process.env.TOKEN
 
 const uuidv1 = require('uuid/v1');
 var base64Img = require('base64-img');
